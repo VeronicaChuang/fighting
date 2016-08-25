@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -10,7 +11,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 /**
  * Created by Matt on 2016/8/8.
  */
-public class MainScene{
+public class MainScene implements KeyListener{
     class RenderLayer{
         public Sprite Sprite;
         public int Layer;
@@ -40,7 +41,11 @@ public class MainScene{
     private Fighter _fighter;
     private int fighterX = main.WINDOWS_WIDTH / 2;
     private int fighterY = main.WINDOWS_HEIGHT - 60;
-    public MainScene(){
+    
+    private int mainW = main.WINDOWS_WIDTH;
+    private int mainH = main.WINDOWS_HEIGHT;
+    
+    public MainScene() {
         _rect = new Insets(0, 0, main.WINDOWS_HEIGHT, main.WINDOWS_WIDTH);
 
         Sprite _sprite_bg = new Sprite(this, "res\\bg.png", main.WINDOWS_WIDTH, main.WINDOWS_HEIGHT);
@@ -103,15 +108,7 @@ public class MainScene{
     }
 
     //更新
-    public void update(){
-//    	if(fighterX) //飛機不可飛出bondary
-    	
-    	fighterX += main.moveHoriz;
-    	fighterY += main.moveVerti;
-    	
-    	_fighter.setPosition(fighterX,fighterY);
-        this.addToScene(_fighter);
-        
+    public void update(){        
         updateFrame();
     }
 
@@ -130,4 +127,40 @@ public class MainScene{
     private void addToScene(Sprite sprite, int layer){
         _render_objects.add(new RenderLayer(sprite, layer));
     }
+
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		//if figher.x>0 then move
+		
+		switch(e.getKeyCode()){
+		case KeyEvent.VK_LEFT://left
+//			System.out.println("left");
+			_fighter.setPosition(_fighter.get_position().x - Velocity_Fighter, _fighter.get_position().y);
+			break;
+		case KeyEvent.VK_UP://up
+			_fighter.setPosition(_fighter.get_position().x, _fighter.get_position().y - Velocity_Fighter);
+			break;
+		case KeyEvent.VK_RIGHT://right
+			_fighter.setPosition(_fighter.get_position().x +Velocity_Fighter, _fighter.get_position().y);
+			break;
+		case KeyEvent.VK_DOWN://down
+			_fighter.setPosition(_fighter.get_position().x, _fighter.get_position().y + Velocity_Fighter);
+			break;
+		case KeyEvent.VK_SPACE://space
+			break;
+		}
+	}
+	
+	@Override
+	public void keyReleased(KeyEvent e) {
+		
+		
+		
+		
+	}
+
+
+	@Override
+	public void keyTyped(KeyEvent e) {}
 }
