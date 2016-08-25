@@ -45,7 +45,11 @@ public class MainScene implements KeyListener{
     private int mainW = main.WINDOWS_WIDTH;
     private int mainH = main.WINDOWS_HEIGHT;
     
+    private List<Integer> userKeys;
+    
     public MainScene() {
+    	userKeys = new ArrayList<Integer>();
+    	
         _rect = new Insets(0, 0, main.WINDOWS_HEIGHT, main.WINDOWS_WIDTH);
 
         Sprite _sprite_bg = new Sprite(this, "res\\bg.png", main.WINDOWS_WIDTH, main.WINDOWS_HEIGHT);
@@ -92,7 +96,6 @@ public class MainScene implements KeyListener{
     //更新畫面
     private void updateFrame(){    	
         main.clearSprite();
-                
         
         List<RenderLayer> render_objs = _render_objects;     
 
@@ -132,35 +135,42 @@ public class MainScene implements KeyListener{
 	@Override
 	public void keyPressed(KeyEvent e) {
 		//if figher.x>0 then move
-		
-		switch(e.getKeyCode()){
-		case KeyEvent.VK_LEFT://left
-//			System.out.println("left");
-			_fighter.setPosition(_fighter.get_position().x - Velocity_Fighter, _fighter.get_position().y);
-			break;
-		case KeyEvent.VK_UP://up
-			_fighter.setPosition(_fighter.get_position().x, _fighter.get_position().y - Velocity_Fighter);
-			break;
-		case KeyEvent.VK_RIGHT://right
-			_fighter.setPosition(_fighter.get_position().x +Velocity_Fighter, _fighter.get_position().y);
-			break;
-		case KeyEvent.VK_DOWN://down
-			_fighter.setPosition(_fighter.get_position().x, _fighter.get_position().y + Velocity_Fighter);
-			break;
-		case KeyEvent.VK_SPACE://space
-			break;
-		}
-	}
-	
+		if(!userKeys.contains(e.getKeyCode()))
+			userKeys.add(new Integer(e.getKeyCode()));		
+		_fighter_move();// use combo keys to fly fighter by adding to list
+	}	
 	@Override
 	public void keyReleased(KeyEvent e) {
-		
-		
-		
-		
+		userKeys.remove(new Integer(e.getKeyCode()));		
 	}
-
-
 	@Override
 	public void keyTyped(KeyEvent e) {}
+	
+	protected void _fighter_move(){
+		int x = _fighter._x;
+		int y = _fighter._y;	
+		
+		if((y-35)>0){
+			if(userKeys.contains(KeyEvent.VK_UP))
+				y -= Velocity_Fighter;			
+		}
+		if((y+35)<main.WINDOWS_HEIGHT)
+			if(userKeys.contains(KeyEvent.VK_DOWN)){
+				y += Velocity_Fighter;
+		}
+		if(x-45>0){
+			if(userKeys.contains(KeyEvent.VK_LEFT)){
+				x -= Velocity_Fighter;
+			}
+		}
+		if((x+45) < main.WINDOWS_WIDTH){
+			if(userKeys.contains(KeyEvent.VK_RIGHT)){
+				x += Velocity_Fighter;
+			}
+		}
+		if(userKeys.contains(KeyEvent.VK_SPACE)){}
+			//發射子彈
+		_fighter.setPosition(x, y);
+		System.out.println("flight_x: "+x+ "flight_y: "+y);
+	}
 }

@@ -22,7 +22,8 @@ public class Sprite {
     public int get_x(){return _x;}
     public int get_y(){return _y;}
     //設定元件與網格邊界之距離, 使用 Insets(int top, int left, int bottom, int right)
-      public Insets get_boundary(){return new Insets(_x-(_width/2), _y-(_height/2), _x+(_width/2), _y+(_height/2));}
+//    public Insets get_boundary(){return new Insets(_x-(_width/2), _y-(_height/2), _x+(_width/2), _y+(_height/2));}
+    public Insets get_boundary(){return new Insets(_y-(_height/2),_x-(_width/2), _y+(_height/2), _x+(_width/2));}
 
     //point 放座標(x,y)
     public Point get_position(){return new Point(_x, _y);}

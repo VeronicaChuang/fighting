@@ -46,14 +46,6 @@ public class main extends Canvas{
 
         onUpdate();
     }
-//    }
-//    public static int moveV(){
-//    	return moveVerti;
-//    }
-//    
-//    public static int moveH(){
-//    	return moveHoriz;
-//    }
 
     private static void onUpdate(){
         while (true) {
