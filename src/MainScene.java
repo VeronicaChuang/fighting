@@ -20,6 +20,8 @@ public class MainScene{
             Layer = layer;
         }
 
+      /*Collection中的HashMap的key與HashSet的內容值需overridden hashCode()
+      	使二個內容相同的物件有相同的hashCode */     
         @Override
         public int hashCode() {
             return Sprite.hashCode();
@@ -36,6 +38,8 @@ public class MainScene{
     public Insets get_rect(){return _rect;}
 
     private Fighter _fighter;
+    private int fighterX = main.WINDOWS_WIDTH / 2;
+    private int fighterY = main.WINDOWS_HEIGHT - 60;
     public MainScene(){
         _rect = new Insets(0, 0, main.WINDOWS_HEIGHT, main.WINDOWS_WIDTH);
 
@@ -44,30 +48,30 @@ public class MainScene{
         addToScene(_sprite_bg);
 
         int left = 80;
-        Sprite _enemy1 = new Sprite(this, "res/enemy1.png", 80, 80);
-        _enemy1.setPosition(left, main.WINDOWS_HEIGHT / 2);
-        addToScene(_enemy1);
-        left+=80;
-
-        Sprite _enemy2 = new Sprite(this, "res\\enemy2.png", 80, 80);
-        _enemy2.setPosition(left, main.WINDOWS_HEIGHT / 2);
-        addToScene(_enemy2);
-        left+=80;
-
-        Sprite _enemy3 = new Sprite(this, "res\\enemy3.png", 80, 80);
-        _enemy3.setPosition(left, main.WINDOWS_HEIGHT / 2);
-        addToScene(_enemy3);
-        left+=80;
-
-        Sprite _enemy4 = new Sprite(this, "res\\enemy4.png", 80, 80);
-        _enemy4.setPosition(left, main.WINDOWS_HEIGHT / 2);
-        addToScene(_enemy4);
-        left+=80;
-
-        Sprite _bullet = new Sprite(this, "res\\bullet.png", 16, 20);
-        _bullet.setPosition(left, main.WINDOWS_HEIGHT / 2);
-        addToScene(_bullet);
-     
+//        Sprite _enemy1 = new Sprite(this, "res/enemy1.png", 80, 80);
+//        _enemy1.setPosition(left, main.WINDOWS_HEIGHT / 2);
+//        addToScene(_enemy1);
+//        left+=80;
+//
+//        Sprite _enemy2 = new Sprite(this, "res\\enemy2.png", 80, 80);
+//        _enemy2.setPosition(left, main.WINDOWS_HEIGHT / 2);
+//        addToScene(_enemy2);
+//        left+=80;
+//
+//        Sprite _enemy3 = new Sprite(this, "res\\enemy3.png", 80, 80);
+//        _enemy3.setPosition(left, main.WINDOWS_HEIGHT / 2);
+//        addToScene(_enemy3);
+//        left+=80;
+//
+//        Sprite _enemy4 = new Sprite(this, "res\\enemy4.png", 80, 80);
+//        _enemy4.setPosition(left, main.WINDOWS_HEIGHT / 2);
+//        addToScene(_enemy4);
+//        left+=80;
+//
+//        Sprite _bullet = new Sprite(this, "res\\bullet.png", 16, 20);
+//        _bullet.setPosition(left, main.WINDOWS_HEIGHT / 2);
+//        addToScene(_bullet);
+//     
         _fighter = new Fighter(this, "res\\fighter.png", 90, 60, 3);
         SpawnFighter();
         addToScene(_fighter);
@@ -81,10 +85,11 @@ public class MainScene{
     }
 
     //更新畫面
-    private void updateFrame(){
+    private void updateFrame(){    	
         main.clearSprite();
-
-        List<RenderLayer> render_objs = _render_objects;
+                
+        
+        List<RenderLayer> render_objs = _render_objects;     
 
         Collections.sort(render_objs,
                 new Comparator<RenderLayer>() {
@@ -99,6 +104,14 @@ public class MainScene{
 
     //更新
     public void update(){
+//    	if(fighterX) //飛機不可飛出bondary
+    	
+    	fighterX += main.moveHoriz;
+    	fighterY += main.moveVerti;
+    	
+    	_fighter.setPosition(fighterX,fighterY);
+        this.addToScene(_fighter);
+        
         updateFrame();
     }
 

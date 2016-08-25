@@ -22,6 +22,7 @@ public class main extends Canvas{
 
     private static List<Sprite> _images = new LinkedList<>();
     private static MainScene _main_scene = new MainScene();
+    public static int moveVerti = 0, moveHoriz = 0;
 
     public static void main(String[] args){
         int borderWidth_bar = 40;
@@ -37,20 +38,53 @@ public class main extends Canvas{
 			@Override
 			public void keyTyped(KeyEvent e) {}			
 			@Override
-			public void keyReleased(KeyEvent e) {}			
+			public void keyReleased(KeyEvent e) {
+				int nowkeyCode = e.getKeyCode();
+				switch(nowkeyCode){
+				case 37://left
+					moveHoriz += 5;
+					break;
+				case 38://up
+					moveVerti += 5;
+					break;
+				case 39://right
+					moveHoriz -= 5;
+					break;
+				case 40://down
+					moveVerti -= 5;
+					break;
+				case 32://space
+					break;
+				}
+//				if(e.getKeyCode() == KeyEvent.VK_UP){
+//		    		moveVerti -= 5;
+//		    	}else if(e.getKeyCode() == KeyEvent.VK_DOWN){
+//		    		moveVerti += 5;
+//		    	}else if(e.getKeyCode() == KeyEvent.VK_LEFT){
+//		    		moveHoriz -= 5;
+//		    	}else if(e.getKeyCode() == KeyEvent.VK_RIGHT){
+//		    		moveHoriz = 5;
+//		    	}				
+			}			
 			@Override
 			public void keyPressed(KeyEvent e) {
-				
-		    	if(e.getKeyCode() == KeyEvent.VK_UP){
-		    		System.out.println("up");
-		    	}else if(e.getKeyCode() == KeyEvent.VK_DOWN){
-		    		System.out.println("down");
-		    	}else if(e.getKeyCode() == KeyEvent.VK_LEFT){
-		    		System.out.println("left");
-		    	}else if(e.getKeyCode() == KeyEvent.VK_RIGHT){
-		    		//rect.setPosition()
-		    		System.out.println("right");
-		    	}					
+				int nowkeyCode = e.getKeyCode();
+				switch(nowkeyCode){
+				case 37://left
+					moveHoriz -= 5;
+					break;
+				case 38://up
+					moveVerti -= 5;
+					break;
+				case 39://right
+					moveHoriz += 5;
+					break;
+				case 40://down
+					moveVerti += 5;
+					break;
+				case 32://space
+					break;
+				}
 			}
 		});
 
@@ -65,14 +99,21 @@ public class main extends Canvas{
 
         onUpdate();
     }
+    public static int moveV(){
+    	return moveVerti;
+    }
+    
+    public static int moveH(){
+    	return moveHoriz;
+    }
 
     private static void onUpdate(){
         while (true) {
             _main_scene.update();
-            onRender();
+            onRender();//把東畫出來
 
             try {
-                Thread.sleep(16);
+                Thread.sleep(16); //每隔0.016秒刷新畫面
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
