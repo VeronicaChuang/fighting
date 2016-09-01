@@ -39,6 +39,8 @@ public class MainScene implements KeyListener{
     public Insets get_rect(){return _rect;}
 
     private Fighter _fighter;
+    private Sprite _bullet;
+    private List<Sprite> bulletOut;
     private int fighterX = main.WINDOWS_WIDTH / 2;
     private int fighterY = main.WINDOWS_HEIGHT - 60;
     
@@ -78,15 +80,29 @@ public class MainScene implements KeyListener{
 //        left+=80;
 //
 //        Sprite _bullet = new Sprite(this, "res\\bullet.png", 16, 20);
-//        _bullet.setPosition(left, main.WINDOWS_HEIGHT / 2);
+//        _bullet.setPosition(main.WINDOWS_WIDTH / 2, main.WINDOWS_HEIGHT - 65); //bullet position       
 //        addToScene(_bullet);
-//     
+        
+     
         _fighter = new Fighter(this, "res\\fighter.png", 90, 60, 3);
         SpawnFighter();
         addToScene(_fighter);
    
     }
-
+    
+    //子彈
+    private void SpawnBullet(){
+    	_bullet = new Sprite(this, "res\\bullet.png", 16, 20);
+        _bullet.setPosition(_fighter._x, _fighter._y);
+        addToScene(_bullet);
+        
+//        bulletOut.add(_bullet);
+        int _bullet_y = _bullet._y;
+        while(_bullet_y<0){
+        	_bullet._y -= Velocity_Bullet;        	
+        }
+        
+    }
 
     //重置飛機位置
     private void SpawnFighter(){
@@ -168,8 +184,11 @@ public class MainScene implements KeyListener{
 				x += Velocity_Fighter;
 			}
 		}
-		if(userKeys.contains(KeyEvent.VK_SPACE)){}
+		if(userKeys.contains(KeyEvent.VK_SPACE)){
+			SpawnBullet();
+		}
 			//發射子彈
+		
 		_fighter.setPosition(x, y);
 		System.out.println("flight_x: "+x+ "flight_y: "+y);
 	}

@@ -27,8 +27,7 @@ public class main extends Canvas{
 
     public static void main(String[] args){
         int borderWidth_bar = 40;
-        int borderWidth_side = 10;
-        
+        int borderWidth_side = 10;        
 
         _frame.setSize(WINDOWS_WIDTH+borderWidth_side, WINDOWS_HEIGHT+borderWidth_bar);
         _frame.add(_canvas, BorderLayout.CENTER);
