@@ -47,7 +47,7 @@ public class MainScene implements KeyListener{
     private int mainW = main.WINDOWS_WIDTH;
     private int mainH = main.WINDOWS_HEIGHT;
     
-    private List<Integer> userKeys;
+    private List<Integer> userKeys; //for directions
     
     public MainScene() {
     	userKeys = new ArrayList<Integer>();
@@ -87,28 +87,9 @@ public class MainScene implements KeyListener{
         _fighter = new Fighter(this, "res\\fighter.png", 90, 60, 3);
         SpawnFighter();
         addToScene(_fighter);
+        
    
-    }
-    
-    //子彈
-//    private void SpawnBullet(){
-//    	_bullet = new Sprite(this, "res\\bullet.png", 16, 20);
-//        _bullet.setPosition(_fighter._x, _fighter._y);
-//        addToScene(_bullet);
-//        
-////        bulletOut.add(_bullet);
-////        int _bullet_y = _bullet._y;
-////        while(_bullet_y<0){
-////        	_bullet._y -= Velocity_Bullet;        	
-////        }
-//        
-//    }
-  //call fighter bullet class
-    private void SpawnBullet(){
-    	_fighter_bullet fBullet = new _fighter_bullet(this, "res\\bullet.png", 16, 20);
-    	fBullet.setPosition(_fighter._x, _fighter._y);
-    	addToScene(fBullet);
-    }
+    } 
 
     //重置飛機位置
     private void SpawnFighter(){
@@ -153,7 +134,7 @@ public class MainScene implements KeyListener{
         _render_objects.add(new RenderLayer(sprite, layer));
     }
 
-  //key event
+ //key event
 	@Override
 	public void keyPressed(KeyEvent e) {
 		//if figher.x>0 then move
@@ -161,7 +142,7 @@ public class MainScene implements KeyListener{
 			userKeys.add(new Integer(e.getKeyCode()));		
 		_fighter_move();// use combo keys to fly fighter by adding to list
 		
-		System.out.println(userKeys);
+//		System.out.println(userKeys);
 	}	
 	@Override
 	public void keyReleased(KeyEvent e) {
@@ -170,19 +151,16 @@ public class MainScene implements KeyListener{
 	@Override
 	public void keyTyped(KeyEvent e) {}
 	
-	protected void fireBullet(){
-		int x = _fighter._x;
-		int y = _fighter._y;
-		
-		//發射子彈
-		if(userKeys.contains(KeyEvent.VK_SPACE)){
-			SpawnBullet();
-			System.out.println("bullet");
-		}
-	}
 	
-	//TODO remove bullet out of bondary
-	
+//call fighter bullet class
+    private void SpawnBullet(){
+    	int bulletNowY =800;
+    	_fighter_bullet fBullet = new _fighter_bullet(this, "res\\bullet.png", 16, 20);
+    	fBullet.setPosition(_fighter._x, _fighter._y);
+    	addToScene(fBullet);
+    	System.out.println("mainScene hashcode: "+fBullet.hashCode());
+    }
+    
   //move fighter
 	protected void _fighter_move(){
 		int x = _fighter._x;
@@ -213,12 +191,10 @@ public class MainScene implements KeyListener{
 //		//發射子彈
 		if(userKeys.contains(KeyEvent.VK_SPACE)){
 			SpawnBullet();
-			System.out.println("bullet");
 		}
-			
 		
 		
 		_fighter.setPosition(x, y);
-		System.out.println("flight_x: "+x+ "flight_y: "+y);
+//		System.out.println("flight_x: "+x+ "flight_y: "+y);
 	}
 }
