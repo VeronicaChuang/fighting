@@ -91,17 +91,23 @@ public class MainScene implements KeyListener{
     }
     
     //子彈
+//    private void SpawnBullet(){
+//    	_bullet = new Sprite(this, "res\\bullet.png", 16, 20);
+//        _bullet.setPosition(_fighter._x, _fighter._y);
+//        addToScene(_bullet);
+//        
+////        bulletOut.add(_bullet);
+////        int _bullet_y = _bullet._y;
+////        while(_bullet_y<0){
+////        	_bullet._y -= Velocity_Bullet;        	
+////        }
+//        
+//    }
+  //call fighter bullet class
     private void SpawnBullet(){
-    	_bullet = new Sprite(this, "res\\bullet.png", 16, 20);
-        _bullet.setPosition(_fighter._x, _fighter._y);
-        addToScene(_bullet);
-        
-//        bulletOut.add(_bullet);
-        int _bullet_y = _bullet._y;
-        while(_bullet_y<0){
-        	_bullet._y -= Velocity_Bullet;        	
-        }
-        
+    	_fighter_bullet fBullet = new _fighter_bullet(this, "res\\bullet.png", 16, 20);
+    	fBullet.setPosition(_fighter._x, _fighter._y);
+    	addToScene(fBullet);
     }
 
     //重置飛機位置
@@ -147,13 +153,15 @@ public class MainScene implements KeyListener{
         _render_objects.add(new RenderLayer(sprite, layer));
     }
 
-
+  //key event
 	@Override
 	public void keyPressed(KeyEvent e) {
 		//if figher.x>0 then move
 		if(!userKeys.contains(e.getKeyCode()))
 			userKeys.add(new Integer(e.getKeyCode()));		
 		_fighter_move();// use combo keys to fly fighter by adding to list
+		
+		System.out.println(userKeys);
 	}	
 	@Override
 	public void keyReleased(KeyEvent e) {
@@ -162,32 +170,53 @@ public class MainScene implements KeyListener{
 	@Override
 	public void keyTyped(KeyEvent e) {}
 	
+	protected void fireBullet(){
+		int x = _fighter._x;
+		int y = _fighter._y;
+		
+		//發射子彈
+		if(userKeys.contains(KeyEvent.VK_SPACE)){
+			SpawnBullet();
+			System.out.println("bullet");
+		}
+	}
+	
+	//TODO remove bullet out of bondary
+	
+  //move fighter
 	protected void _fighter_move(){
 		int x = _fighter._x;
-		int y = _fighter._y;	
+		int y = _fighter._y;
 		
 		if((y-35)>0){
 			if(userKeys.contains(KeyEvent.VK_UP))
 				y -= Velocity_Fighter;			
 		}
-		if((y+35)<main.WINDOWS_HEIGHT)
+		
+		if((y+35)<main.WINDOWS_HEIGHT){
 			if(userKeys.contains(KeyEvent.VK_DOWN)){
 				y += Velocity_Fighter;
+			}
 		}
+		
 		if(x-45>0){
 			if(userKeys.contains(KeyEvent.VK_LEFT)){
 				x -= Velocity_Fighter;
 			}
 		}
+		
 		if((x+45) < main.WINDOWS_WIDTH){
 			if(userKeys.contains(KeyEvent.VK_RIGHT)){
 				x += Velocity_Fighter;
 			}
 		}
+//		//發射子彈
 		if(userKeys.contains(KeyEvent.VK_SPACE)){
 			SpawnBullet();
+			System.out.println("bullet");
 		}
-			//發射子彈
+			
+		
 		
 		_fighter.setPosition(x, y);
 		System.out.println("flight_x: "+x+ "flight_y: "+y);
