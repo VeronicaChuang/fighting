@@ -1,3 +1,4 @@
+package practice;
 import java.io.*;
 
 class bird {                                                                    // 鳥
