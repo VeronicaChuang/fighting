@@ -6,7 +6,7 @@ public class _fighter_bullet extends Sprite {
 	private int newX =0;
 	private int newY =0;
 	private int checkY = 800;
-	private BufferedImage bullet_img =null;
+	protected BufferedImage bullet_img =null;
 	
 	private Timer fighterTimer;
 	private _fighterBulletTask _fighterTask;
@@ -46,9 +46,10 @@ public class _fighter_bullet extends Sprite {
 		//return bulletY after fire
 		checkY = this.get_position().y;		
 		
-		//bullet stop moving after y<0
+		//bullet stop moving after y<0, then send a parameter to tell mainScene it's over
 		if(checkY<0){
-			fighterTimer.cancel(); 
+			fighterTimer.cancel();
+			bullet_img = this.getImg();
 		}
 		System.out.println(checkY);
 	}

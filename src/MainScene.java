@@ -154,11 +154,26 @@ public class MainScene implements KeyListener{
 	
 //call fighter bullet class
     private void SpawnBullet(){
-    	int bulletNowY =800;
+    //new bullet
     	_fighter_bullet fBullet = new _fighter_bullet(this, "res\\bullet.png", 16, 20);
     	fBullet.setPosition(_fighter._x, _fighter._y);
     	addToScene(fBullet);
-    	System.out.println("mainScene hashcode: "+fBullet.hashCode());
+    	System.out.println("begin size:"+_render_objects.size());
+    	
+    //check if bullet out of boundary
+    	Timer checkBoundary = new Timer();
+    	TimerTask bulletTask = new TimerTask() {
+			@Override
+			public void run() {
+				if(fBullet.bullet_img != null){					
+					removeFromScene(fBullet);
+					checkBoundary.cancel();//cancel timer when remove bullet
+					System.out.println("after size:"+_render_objects.size());
+				}
+			}
+		};
+		checkBoundary.schedule(bulletTask, 200, 100);
+//    	System.out.println("mainScene hashcode: "+fBullet.hashCode());
     }
     
   //move fighter
