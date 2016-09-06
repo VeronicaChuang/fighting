@@ -40,54 +40,38 @@ public class MainScene implements KeyListener{
 
     private Fighter _fighter;
     private Sprite _bullet;
+    private Sprite _enemy1;
+    protected Sprite _enemy2;
+    private Sprite _enemy3;
+    private Sprite _enemy4;
+    private Sprite _sprite_bg;
+    
     private List<Sprite> bulletOut;
     private int fighterX = main.WINDOWS_WIDTH / 2;
     private int fighterY = main.WINDOWS_HEIGHT - 60;
     
     private int mainW = main.WINDOWS_WIDTH;
     private int mainH = main.WINDOWS_HEIGHT;
+    protected int ny2= 750;
+    private int bgDX = 10;
+  
     
     private List<Integer> userKeys; //for directions
     
     public MainScene() {
-    	userKeys = new ArrayList<Integer>();
+    	userKeys = new ArrayList<Integer>();//array for direction keys 
     	
         _rect = new Insets(0, 0, main.WINDOWS_HEIGHT, main.WINDOWS_WIDTH);
-
-        Sprite _sprite_bg = new Sprite(this, "res\\bg.png", main.WINDOWS_WIDTH, main.WINDOWS_HEIGHT);
+        
+        _sprite_bg = new Sprite(this, "res\\bg.png", main.WINDOWS_WIDTH, main.WINDOWS_HEIGHT);
         _sprite_bg.setPosition(main.WINDOWS_WIDTH / 2, main.WINDOWS_HEIGHT / 2);
         addToScene(_sprite_bg);
-
-        int left = 80;
-//        Sprite _enemy1 = new Sprite(this, "res/enemy1.png", 80, 80);
-//        _enemy1.setPosition(left, main.WINDOWS_HEIGHT / 2);
-//        addToScene(_enemy1);
-//        left+=80;
-//
-//        Sprite _enemy2 = new Sprite(this, "res\\enemy2.png", 80, 80);
-//        _enemy2.setPosition(left, main.WINDOWS_HEIGHT / 2);
-//        addToScene(_enemy2);
-//        left+=80;
-//
-//        Sprite _enemy3 = new Sprite(this, "res\\enemy3.png", 80, 80);
-//        _enemy3.setPosition(left, main.WINDOWS_HEIGHT / 2);
-//        addToScene(_enemy3);
-//        left+=80;
-//
-//        Sprite _enemy4 = new Sprite(this, "res\\enemy4.png", 80, 80);
-//        _enemy4.setPosition(left, main.WINDOWS_HEIGHT / 2);
-//        addToScene(_enemy4);
-//        left+=80;
-//
-//        Sprite _bullet = new Sprite(this, "res\\bullet.png", 16, 20);
-//        _bullet.setPosition(main.WINDOWS_WIDTH / 2, main.WINDOWS_HEIGHT - 65); //bullet position       
-//        addToScene(_bullet);
-        
      
         _fighter = new Fighter(this, "res\\fighter.png", 90, 60, 3);
         SpawnFighter();
         addToScene(_fighter);
         
+        newEmemy(); //new 出敵機
    
     } 
 
@@ -116,6 +100,11 @@ public class MainScene implements KeyListener{
     //更新
     public void update(){        
         updateFrame();
+    }
+    
+    private void bgmove(){//not finish
+    	int y = _sprite_bg.get_y();
+    	_sprite_bg.setPosition(main.WINDOWS_WIDTH/2, y--);
     }
 
     //移除場景物件
@@ -153,12 +142,12 @@ public class MainScene implements KeyListener{
 	
 	
 //call fighter bullet class
-    private void SpawnBullet(){
+    private void SpawnBullet(){    	
     //new bullet
     	_fighter_bullet fBullet = new _fighter_bullet(this, "res\\bullet.png", 16, 20);
     	fBullet.setPosition(_fighter._x, _fighter._y);
     	addToScene(fBullet);
-    	System.out.println("begin size:"+_render_objects.size());
+//    	System.out.println("begin size:"+_render_objects.size());
     	
     //check if bullet out of boundary
     	Timer checkBoundary = new Timer();
@@ -168,7 +157,7 @@ public class MainScene implements KeyListener{
 				if(fBullet.bullet_img != null){					
 					removeFromScene(fBullet);
 					checkBoundary.cancel();//cancel timer when remove bullet
-					System.out.println("after size:"+_render_objects.size());
+//					System.out.println("after size:"+_render_objects.size());
 				}
 			}
 		};
@@ -179,16 +168,23 @@ public class MainScene implements KeyListener{
   //move fighter
 	protected void _fighter_move(){
 		int x = _fighter._x;
-		int y = _fighter._y;
+		int y = _fighter._y;		
+		int bgy = _sprite_bg._y;
 		
-		if((y-35)>0){
-			if(userKeys.contains(KeyEvent.VK_UP))
-				y -= Velocity_Fighter;			
+		
+		if(userKeys.contains(KeyEvent.VK_UP)){
+//			SpawnEnemy();
+			if((y-35)>0){
+				y -= Velocity_Fighter;	
+			}
+//			bgy -= bgDX;
+//			_sprite_bg.setPosition(main.WINDOWS_WIDTH/2, bgy);
+	
 		}
 		
 		if((y+35)<main.WINDOWS_HEIGHT){
 			if(userKeys.contains(KeyEvent.VK_DOWN)){
-				y += Velocity_Fighter;
+				y += Velocity_Fighter;	
 			}
 		}
 		
@@ -212,4 +208,67 @@ public class MainScene implements KeyListener{
 		_fighter.setPosition(x, y);
 //		System.out.println("flight_x: "+x+ "flight_y: "+y);
 	}
+
+	
+	//create enemies
+	protected void newEmemy(){	
+		Timer _new_enemy = new Timer();		
+		TimerTask enemy2_Task = new TimerTask() {
+			@Override
+			public void run() {//生出enemy2
+				SpawnEnemy2();
+			}
+		};
+//		TimerTask enemy3_Task = new TimerTask() {
+//			@Override
+//			public void run() {//生出enemy3
+//				SpawnEnemy3();
+//			}
+//		};
+//		TimerTask enemy4_Task = new TimerTask() {
+//			@Override
+//			public void run() {//生出enemy4
+//				SpawnEnemy4();
+//			}
+//		};
+//		TimerTask enemy1_Task = new TimerTask() {
+//			@Override
+//			public void run() {//生出enemy1
+//				SpawnEnemy1();
+//			}
+//		};
+		
+		//設定自動生出敵機的時間
+//		_new_enemy.schedule(enemy1_Task, 1000*10, 1000*8);
+		_new_enemy.schedule(enemy2_Task, 0, 1000*30);
+//		_new_enemy.schedule(enemy3_Task, 1000*30, 1000*25);
+//		_new_enemy.schedule(enemy4_Task, 1000*20, 1000*12);
+	}
+
+	private void SpawnEnemy2(){
+		_enemy2 = new _enemy(this, "res/enemy2.png", 80, 80);
+		_enemy2.setPosition((int)(Math.random()*(main.WINDOWS_WIDTH-80)+80), 0);
+		addToScene(_enemy2);
+		System.out.println("setposition: "+_enemy2.get_position().x+", "+_enemy2.get_position().y);
+
+	}	
+	
+	private void SpawnEnemy3(){
+		_enemy3 = new _enemy(this, "res/enemy3.png", 80, 80);
+		_enemy3.setPosition((int)(Math.random()*(main.WINDOWS_WIDTH-80)+80), 10);
+		addToScene(_enemy3);	
+	}	
+	
+	private void SpawnEnemy4(){
+		_enemy4 = new _enemy(this, "res/enemy4.png", 80, 80);
+		_enemy4.setPosition((int)(Math.random()*(main.WINDOWS_WIDTH-80)+80), 10);
+		addToScene(_enemy4);	
+	}	
+	
+	private void SpawnEnemy1(){
+		_enemy1 = new _enemy(this, "res/enemy1.png", 80, 80);
+		_enemy1.setPosition((int)(Math.random()*(main.WINDOWS_WIDTH-80)+80), 10);
+		addToScene(_enemy1);	
+	}	
+		
 }
