@@ -3,7 +3,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class _enemy extends Sprite {
-	private int x =0, y=0, newY=0, dx=0;
+	private int x =0, y=0, newY=0, dx=0, ySpeedup=2;
 	protected BufferedImage bullet_img =null;	
 	private Timer enemyTimer;
 	private _enemyMoveTask _enemyTask;	
@@ -31,30 +31,31 @@ public class _enemy extends Sprite {
 		}		
 	}	
 	
-	//move
+	//敵機移動頻率
+	protected void sendEnemy(){ 
+		enemyTimer.schedule(_enemyTask, 0, 300);
+	}
+	
+	//enemy move
 	protected void move(){ 	
 		x = this.get_position().x;
 		y = this.get_position().y;
-		System.out.println("01-getposition x: "+x+", y: "+y);
-		dx = ((int)(Math.random()*5)+1);	//左右移動距離
+		dx = ((int)(Math.random()*8)+1);	//左右移動距離
 		if(x<=45){
 			leftWall=true;			//碰到左邊界改+dx
 		}
+		
 		if(x>=main.WINDOWS_WIDTH-45){//碰到右邊界改-dx
 			leftWall =false;
 		}
-		//set new bullet position after fire with timer		
+		
 		if(leftWall){
-			this.setPosition((x+=dx), (y += (MainScene.Velocity_Enemy)+2));
-			System.out.println("02-x: "+(x+dx)+", y: "+(y += (MainScene.Velocity_Enemy)+2));
+			this.setPosition((x+=dx), (y += (MainScene.Velocity_Enemy)+ySpeedup));
 		}else{		
-			this.setPosition((x-=dx), (y += (MainScene.Velocity_Enemy)+2));
-			System.out.println("03-x: "+(x+dx)+", y: "+(y += (MainScene.Velocity_Enemy)+2));
+			this.setPosition((x-=dx), (y += (MainScene.Velocity_Enemy)+ySpeedup));
 		}
 	}
 	
-	public void sendEnemy(){
-		enemyTimer.schedule(_enemyTask, 0, 1000*1);
-	}
+	
 	
 }

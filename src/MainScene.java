@@ -39,33 +39,27 @@ public class MainScene implements KeyListener{
     public Insets get_rect(){return _rect;}
 
     private Fighter _fighter;
-    private Sprite _bullet;
-    private Sprite _enemy1;
-    protected Sprite _enemy2;
-    private Sprite _enemy3;
-    private Sprite _enemy4;
-    private Sprite _sprite_bg;
-    
-    private List<Sprite> bulletOut;
-    private int fighterX = main.WINDOWS_WIDTH / 2;
-    private int fighterY = main.WINDOWS_HEIGHT - 60;
-    
-    private int mainW = main.WINDOWS_WIDTH;
-    private int mainH = main.WINDOWS_HEIGHT;
+    protected _enemy _enemy1;
+    protected _enemy _enemy2;
+    protected _enemy _enemy3;
+    protected _enemy _enemy4;
+    private Sprite _sprite_bg1, _sprite_bg2;    
     protected int ny2= 750;
-    private int bgDX = 10;
-  
-    
     private List<Integer> userKeys; //for directions
     
-    public MainScene() {
+    int bg1NewY = main.WINDOWS_HEIGHT / 2;
+	int bg2NewY = 1140;
+	int dx = 2;
+    
+    public MainScene() {//bg->fighter->enemy
     	userKeys = new ArrayList<Integer>();//array for direction keys 
     	
         _rect = new Insets(0, 0, main.WINDOWS_HEIGHT, main.WINDOWS_WIDTH);
         
-        _sprite_bg = new Sprite(this, "res\\bg.png", main.WINDOWS_WIDTH, main.WINDOWS_HEIGHT);
-        _sprite_bg.setPosition(main.WINDOWS_WIDTH / 2, main.WINDOWS_HEIGHT / 2);
-        addToScene(_sprite_bg);
+        _sprite_bg1 = new Sprite(this, "res\\bg.png", main.WINDOWS_WIDTH, main.WINDOWS_HEIGHT);
+        _sprite_bg2 = new Sprite(this, "res\\bg.png", main.WINDOWS_WIDTH, main.WINDOWS_HEIGHT);
+        
+        bgScrol();//set bg1 and bg2 position and scrolling    
      
         _fighter = new Fighter(this, "res\\fighter.png", 90, 60, 3);
         SpawnFighter();
@@ -74,6 +68,45 @@ public class MainScene implements KeyListener{
         newEmemy(); //new 出敵機
    
     } 
+    
+    private void bgScrol(){//not finish
+//    	int bg1NewY = main.WINDOWS_HEIGHT / 2;
+//    	int bg2NewY = -768;
+//    	int dx = 10;
+    	//設定bg1初始位置
+    	_sprite_bg1.setPosition(main.WINDOWS_WIDTH/2, bg1NewY);//(x,384)
+    	//設定bg2初始位置
+    	_sprite_bg2.setPosition(main.WINDOWS_WIDTH/2, bg2NewY);//(x,-768)     
+        addToScene(_sprite_bg1);
+        addToScene(_sprite_bg2);
+        
+        //set Timer to scrolling the bgs
+        Timer bgTimer = new Timer();
+        TimerTask bgTask = new TimerTask() {			
+			@Override
+			public void run() {
+				if(bg1NewY <= -375){
+					bg1NewY = 1140;
+				}
+//				if(bg2NewY <= -375){
+//					bg2NewY = 1100;
+//				}
+				bg1NewY -= dx;
+				System.out.println("bg1NewY: "+bg1NewY);
+				_sprite_bg1.setPosition(main.WINDOWS_WIDTH/2, bg1NewY);//(x,384)
+				
+				bg2NewY -= dx;
+				System.out.println("bg2NewY: "+bg2NewY);
+				_sprite_bg2.setPosition(main.WINDOWS_WIDTH/2, bg2NewY);//(x,-768)  
+			}
+		};
+		
+		bgTimer.schedule(bgTask, 0, 10);
+        
+        
+    }
+    
+    
 
     //重置飛機位置
     private void SpawnFighter(){
@@ -102,10 +135,7 @@ public class MainScene implements KeyListener{
         updateFrame();
     }
     
-    private void bgmove(){//not finish
-    	int y = _sprite_bg.get_y();
-    	_sprite_bg.setPosition(main.WINDOWS_WIDTH/2, y--);
-    }
+    
 
     //移除場景物件
     private void removeFromScene(Sprite sprite){
@@ -147,7 +177,7 @@ public class MainScene implements KeyListener{
     	_fighter_bullet fBullet = new _fighter_bullet(this, "res\\bullet.png", 16, 20);
     	fBullet.setPosition(_fighter._x, _fighter._y);
     	addToScene(fBullet);
-//    	System.out.println("begin size:"+_render_objects.size());
+    	System.out.println("begin size:"+_render_objects.size());
     	
     //check if bullet out of boundary
     	Timer checkBoundary = new Timer();
@@ -157,7 +187,7 @@ public class MainScene implements KeyListener{
 				if(fBullet.bullet_img != null){					
 					removeFromScene(fBullet);
 					checkBoundary.cancel();//cancel timer when remove bullet
-//					System.out.println("after size:"+_render_objects.size());
+					System.out.println("after size:"+_render_objects.size());
 				}
 			}
 		};
@@ -169,11 +199,9 @@ public class MainScene implements KeyListener{
 	protected void _fighter_move(){
 		int x = _fighter._x;
 		int y = _fighter._y;		
-		int bgy = _sprite_bg._y;
-		
+//		int bgy = _sprite_bg._y;
 		
 		if(userKeys.contains(KeyEvent.VK_UP)){
-//			SpawnEnemy();
 			if((y-35)>0){
 				y -= Velocity_Fighter;	
 			}
@@ -200,8 +228,9 @@ public class MainScene implements KeyListener{
 			}
 		}
 //		//發射子彈
-		if(userKeys.contains(KeyEvent.VK_SPACE)){
+		if(userKeys.contains(KeyEvent.VK_SPACE)){//抓不到key時確認輸入法為英文
 			SpawnBullet();
+			System.out.println("space");
 		}
 		
 		
@@ -219,56 +248,58 @@ public class MainScene implements KeyListener{
 				SpawnEnemy2();
 			}
 		};
-//		TimerTask enemy3_Task = new TimerTask() {
-//			@Override
-//			public void run() {//生出enemy3
-//				SpawnEnemy3();
-//			}
-//		};
-//		TimerTask enemy4_Task = new TimerTask() {
-//			@Override
-//			public void run() {//生出enemy4
-//				SpawnEnemy4();
-//			}
-//		};
-//		TimerTask enemy1_Task = new TimerTask() {
-//			@Override
-//			public void run() {//生出enemy1
-//				SpawnEnemy1();
-//			}
-//		};
+		TimerTask enemy3_Task = new TimerTask() {
+			@Override
+			public void run() {//生出enemy3
+				SpawnEnemy3();
+			}
+		};
+		TimerTask enemy4_Task = new TimerTask() {
+			@Override
+			public void run() {//生出enemy4
+				SpawnEnemy4();
+			}
+		};
+		TimerTask enemy1_Task = new TimerTask() {
+			@Override
+			public void run() {//生出enemy1
+				SpawnEnemy1();
+			}
+		};
 		
 		//設定自動生出敵機的時間
-//		_new_enemy.schedule(enemy1_Task, 1000*10, 1000*8);
-		_new_enemy.schedule(enemy2_Task, 0, 1000*30);
-//		_new_enemy.schedule(enemy3_Task, 1000*30, 1000*25);
-//		_new_enemy.schedule(enemy4_Task, 1000*20, 1000*12);
+		_new_enemy.schedule(enemy1_Task, 1000*10, 1000*10);
+		_new_enemy.schedule(enemy2_Task, 0, 1000*3);
+		_new_enemy.schedule(enemy3_Task, 1000*30, 1000*25);
+		_new_enemy.schedule(enemy4_Task, 1000*20, 1000*15);
 	}
 
 	private void SpawnEnemy2(){
-		_enemy2 = new _enemy(this, "res/enemy2.png", 80, 80);
-		_enemy2.setPosition((int)(Math.random()*(main.WINDOWS_WIDTH-80)+80), 0);
+		_enemy2 = new _enemy(this, "res/enemy2.png", 70, 70);
+		_enemy2.setPosition((int)(Math.random()*(main.WINDOWS_WIDTH-80)+80), 40);
 		addToScene(_enemy2);
-		System.out.println("setposition: "+_enemy2.get_position().x+", "+_enemy2.get_position().y);
-
+		_enemy2.sendEnemy();//敵機new出來設定初始位置以後，再開始移動
 	}	
 	
 	private void SpawnEnemy3(){
-		_enemy3 = new _enemy(this, "res/enemy3.png", 80, 80);
-		_enemy3.setPosition((int)(Math.random()*(main.WINDOWS_WIDTH-80)+80), 10);
+		_enemy3 = new _enemy(this, "res/enemy3.png", 70, 70);
+		_enemy3.setPosition((int)(Math.random()*(main.WINDOWS_WIDTH-80)+80), 40);
 		addToScene(_enemy3);	
+		_enemy3.sendEnemy();
 	}	
 	
 	private void SpawnEnemy4(){
-		_enemy4 = new _enemy(this, "res/enemy4.png", 80, 80);
-		_enemy4.setPosition((int)(Math.random()*(main.WINDOWS_WIDTH-80)+80), 10);
+		_enemy4 = new _enemy(this, "res/enemy4.png", 70, 70);
+		_enemy4.setPosition((int)(Math.random()*(main.WINDOWS_WIDTH-80)+80), 40);
 		addToScene(_enemy4);	
+		_enemy4.sendEnemy();
 	}	
 	
 	private void SpawnEnemy1(){
-		_enemy1 = new _enemy(this, "res/enemy1.png", 80, 80);
-		_enemy1.setPosition((int)(Math.random()*(main.WINDOWS_WIDTH-80)+80), 10);
-		addToScene(_enemy1);	
+		_enemy1 = new _enemy(this, "res/enemy1.png", 70, 70);
+		_enemy1.setPosition((int)(Math.random()*(main.WINDOWS_WIDTH-80)+80), 40);
+		addToScene(_enemy1);
+		_enemy1.sendEnemy();
 	}	
 		
 }
