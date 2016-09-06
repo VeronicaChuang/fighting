@@ -51,6 +51,6 @@ public class _fighter_bullet extends Sprite {
 			fighterTimer.cancel();
 			bullet_img = this.getImg();
 		}
-		System.out.println(checkY);
+//		System.out.println(checkY);
 	}
 }
