@@ -1,3 +1,4 @@
+package index;
 import java.awt.image.BufferedImage;
 import java.util.Timer;
 import java.util.TimerTask;

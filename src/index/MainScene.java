@@ -1,3 +1,4 @@
+package index;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -161,6 +162,10 @@ public class MainScene implements KeyListener{
 	@Override
 	public void keyTyped(KeyEvent e) {}
 	
+//enemy bullet
+	private void enemy_bullet(){
+		//TODO 
+	}
 	
 //call fighter bullet class
     private void SpawnBullet(){    	

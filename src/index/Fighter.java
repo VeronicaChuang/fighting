@@ -1,3 +1,4 @@
+package index;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
