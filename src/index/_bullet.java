@@ -3,7 +3,7 @@ import java.awt.image.BufferedImage;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class _fighter_bullet extends Sprite {
+public class _bullet extends Sprite {
 	private int newX =0;
 	private int newY =0;
 	private int checkY = 800;
@@ -12,34 +12,29 @@ public class _fighter_bullet extends Sprite {
 	private Timer fighterTimer;
 	private _fighterBulletTask _fighterTask;
 	private Timer enemyTimer;
-	private _enemyBulletTask _enemyTask;
+	private _enemyBulletTask _enemyTask;	
+	private boolean isFighter=false;
 	
 	
-	public _fighter_bullet(MainScene scene, String img_path, int width, int height) {
+	public _bullet(MainScene scene, String img_path, int width, int height) {
 		super(scene, img_path, width, height);		
 		
 //		System.out.println("path: "+img_path);
-		fighterTimer = new Timer();
-		_fighterTask = new _fighterBulletTask();
-		fighterTimer.schedule(_fighterTask, 0, 40);	
 		
-//		enemyTimer = new Timer();
-//		_enemyTask = new _enemyBulletTask();
-//		enemyTimer.schedule(_enemyTask, 0, 45);
-		
+		if(img_path.equals("res\\bullet.png")) {isFighter=true;} 
+		if(isFighter){
+			fighterTimer = new Timer();
+			_fighterTask = new _fighterBulletTask();
+			fighterTimer.schedule(_fighterTask, 0, 40);	
+		}else{
+			enemyTimer = new Timer();
+			_enemyTask = new _enemyBulletTask();
+			enemyTimer.schedule(_enemyTask, 0, 45);
+		}
 	}
 
-	public _fighter_bullet(MainScene scene, BufferedImage img, int width, int height) {
+	public _bullet(MainScene scene, BufferedImage img, int width, int height) {
 		super(scene, img, width, height);
-		
-//		System.out.println("img: "+img);
-		fighterTimer = new Timer();
-		_fighterTask = new _fighterBulletTask();
-		fighterTimer.schedule(_fighterTask, 0, 40);	
-		
-//		enemyTimer = new Timer();
-//		_enemyTask = new _enemyBulletTask();
-//		enemyTimer.schedule(_enemyTask, 0, 45);
 		
 	}
 	
@@ -89,7 +84,7 @@ public class _fighter_bullet extends Sprite {
 		
 		//bullet stop moving after y<0, then send a parameter to tell mainScene it's over
 		if(checkY>main.WINDOWS_HEIGHT){
-//			fighterTimer.cancel();
+			enemyTimer.cancel();
 			bullet_img = this.getImg();
 		}
 //		System.out.println(checkY);
