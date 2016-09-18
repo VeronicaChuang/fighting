@@ -43,13 +43,12 @@ public class main extends Canvas{
             }
         });
         _frame.addKeyListener(_main_scene);
-
         onUpdate();
     }
 
     private static void onUpdate(){
         while (true) {
-            _main_scene.update();
+            _main_scene.update();         
             onRender();//把東畫出來
 
             try {
@@ -67,11 +66,13 @@ public class main extends Canvas{
     public static void addSprite(Sprite image){
         _images.add(image);
     }
+    
+    
 
     private static void onRender(){
         _image_graphics.setColor(new Color(126, 196, 255));
         _image_graphics.clearRect(0, 0, WINDOWS_WIDTH, WINDOWS_HEIGHT);
-
+        
         for(int i=0; i<_images.size(); i++) {
             int offset_x = _images.get(i).get_width() / 2;
             int offset_y = _images.get(i).get_height() / 2;

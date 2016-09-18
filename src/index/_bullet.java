@@ -14,11 +14,12 @@ public class _bullet extends Sprite {
 	private Timer enemyTimer;
 	private _enemyBulletTask _enemyTask;	
 	private boolean isFighter=false;
+	protected String imgPath ="";
 	
 	
 	public _bullet(MainScene scene, String img_path, int width, int height) {
 		super(scene, img_path, width, height);		
-		
+		imgPath = scene.toString();
 //		System.out.println("path: "+img_path);
 		
 		if(img_path.equals("res\\bullet.png")) {isFighter=true;} 
@@ -38,6 +39,7 @@ public class _bullet extends Sprite {
 		
 	}
 	
+	
 	//use timerTask to control bullet move
 	class _fighterBulletTask extends TimerTask{
 		@Override
@@ -55,6 +57,7 @@ public class _bullet extends Sprite {
 	
 	//move bullet
 	protected void _bullet_fly_up(){ //give bullet x, y before calling fly up
+//		System.out.println("fighter bullet");
 		newX = this.get_position().x; //get bullet now x
 		newY = this.get_position().y; //get bullet now y
 		
@@ -89,4 +92,13 @@ public class _bullet extends Sprite {
 		}
 //		System.out.println(checkY);
 	}
+	
+	protected void destory(){
+		if(isFighter){
+			fighterTimer.cancel();
+		}else{
+			enemyTimer.cancel();
+		}
+	}
+	
 }

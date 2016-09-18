@@ -1,6 +1,9 @@
-package index;
+package practice;
 
 import java.awt.image.BufferedImage;
+
+import index.MainScene;
+import index.Sprite;
 
 public class _enemy_bullet extends Sprite {
 	private int newX =0;

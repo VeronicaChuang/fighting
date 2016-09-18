@@ -57,4 +57,8 @@ public class Sprite {
         _x = x;
         _y = y;
     }
+    
+    public Rectangle getBound(){
+    	return new Rectangle(_x, _y, _width, _height);
+    }
 }
