@@ -262,18 +262,17 @@ public class MainScene implements KeyListener{
 		    			_fighter._fighter_HP -= (int)(Math.random()*10+1);		    				
 	    			}
 	    			if(_fighter._fighter_HP <1){ //TODO 畫面殘留
-	    				//場景畫面停止/清空
-	    				for(int e=0; e<_enemyArray.size();e++){ //清敵機. 
-	    					_enemyArray.get(e).destory();
-		    				removeFromScene(_enemyArray.get(e));
-		    				_enemyArray.remove(e);
-	    				}
-	    				
+	    				//敵機全部死亡	    				
+	    				for(int t=0; t<_enemyArray.size();t++){
+	    					_enemyArray.get(t).destory();
+	    				}	
+	    				//子彈清空  場景畫面停止/清空	    				
 	    				for(int t=0; t<_enemy_Millsile.size();t++){//清子彈
 	    					_enemy_Millsile.get(t).destory();
 	    					removeFromScene(_enemy_Millsile.get(t));
 	    					_enemy_Millsile.remove(t);
-	    				}		    				
+	    				}		    
+	    				//主機死亡
 	    				//跳出gameover
 	    				gameOver();
 	    			}
