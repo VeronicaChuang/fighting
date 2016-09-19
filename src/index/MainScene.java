@@ -14,6 +14,8 @@ import java.util.concurrent.CopyOnWriteArraySet;
 
 import org.omg.stub.java.rmi._Remote_Stub;
 
+import index.Animation.StatusListener;
+
 /**
  * Created by Matt on 2016/8/8.
  */
@@ -28,6 +30,7 @@ public class MainScene implements KeyListener{
     public Insets get_rect(){return _rect;}
 
     private Fighter _fighter;
+    private _Explosion _explosion;
     private Sprite _sprite_bg1, _sprite_bg2;    
     protected int ny2= 750;
     private List<Integer> userKeys; //for directions    
@@ -73,6 +76,12 @@ public class MainScene implements KeyListener{
             return Sprite.hashCode();
         }
     }
+	
+	private void showExplosion(){
+		_explosion = new Fighter(this, "res\\explosion.png", 85, 55, 33);
+        SpawnFighter();
+        addToScene(_fighter);
+	}
 	
     public MainScene() {//bg->fighter->enemy
     	userKeys = new ArrayList<Integer>();//array for direction keys     	
@@ -182,7 +191,12 @@ public class MainScene implements KeyListener{
 	        		Rectangle enemy= _enemyArray.get(j).getBound();
 	        		if(fBullet.intersects(enemy)){           //01-子彈打到敵機要做的事.
 	        			//TODO 01產生爆炸動畫      	        			
+	        			_explosion = new _Explosion(this, null, "res\\explosion.png", 100, 100, 33);
 	        			
+	        			
+	        			_explosion.setPosition(_fighter_Missile.get(i)._x, _fighter_Missile.get(i)._y);
+	        	        addToScene(_explosion);
+	        	        
 	        			//02我方子彈消失
 	        			_fighter_Missile.get(i).destory();
 	        			removeFromScene(_fighter_Missile.get(i));
@@ -276,8 +290,6 @@ public class MainScene implements KeyListener{
 	    				//跳出gameover
 	    				gameOver();
 	    			}
-	    			
-	    			
 	    		}
 	    	}
 //	    	System.out.println("FPS: "+ FPS + "Scords: "+ scord);
