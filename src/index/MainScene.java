@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.FileInputStream;
 import java.sql.Time;
 import java.util.*;
 import java.util.List;
@@ -19,6 +20,7 @@ import javax.sound.sampled.Clip;
 import org.omg.stub.java.rmi._Remote_Stub;
 
 import index.Animation.StatusListener;
+import javazoom.jl.player.Player;
 
 /**
  * Created by Matt on 2016/8/8.
@@ -83,7 +85,8 @@ public class MainScene implements KeyListener{
         }
     }
 		
-    public MainScene() {//bg->fighter->enemy    	
+    public MainScene() {//bg->fighter->enemy   
+    	
         _rect = new Insets(0, 0, main.WINDOWS_HEIGHT, main.WINDOWS_WIDTH);
         
         //construction list
@@ -102,7 +105,7 @@ public class MainScene implements KeyListener{
         SpawnFighter();
         addToScene(_fighter);
         
-        newEmemy();         
+        newEmemy();    
     }     
      
     //重置飛機位置
@@ -200,12 +203,12 @@ public class MainScene implements KeyListener{
 	        			_fighter_Missile.get(i).destory();
 	        			removeFromScene(_fighter_Missile.get(i));
 	        			_fighter_Missile.remove(i);
-	        			System.out.println("_fighter_Missile: "+_fighter_Missile.size());
+//	        			System.out.println("_fighter_Missile: "+_fighter_Missile.size());
 	        			
 	        			//03扣血        			
 	        			if(_enemyArray.get(j)._enemy_HP>0){        				
 	        				_enemyArray.get(j)._enemy_HP -= BulletHitEnemy; 
-	        				System.out.println("hp: "+_enemyArray.get(j)._enemy_HP);
+//	        				System.out.println("hp: "+_enemyArray.get(j)._enemy_HP);
 	        			}
 	        			if(_enemyArray.get(j)._enemy_HP<1){
 	        				//給分數
@@ -253,7 +256,7 @@ public class MainScene implements KeyListener{
 		    			if(_enemyArray.get(j).alive){
 			    			if(_enemyArray.get(j)._enemy_HP>0){        				
 			    				_enemyArray.get(j)._enemy_HP -= craftbump;  //敵機被主機撞扣血量
-			    				System.out.println("hp: "+_enemyArray.get(j)._enemy_HP);
+//			    				System.out.println("hp: "+_enemyArray.get(j)._enemy_HP);
 			    			}
 			    			if(_enemyArray.get(j)._enemy_HP<1){
 			    				//給分數
@@ -315,7 +318,7 @@ public class MainScene implements KeyListener{
     
     //TODO FPS與分數(打敵機的分數計算)
     //TODO 血條
-    //TODO 背景音樂
+    //TODO 背景音樂    
     
     
 //scorlling bg1 and bg2

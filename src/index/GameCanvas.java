@@ -1,7 +1,12 @@
 package index;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+
 import javax.sound.sampled.*;
+
+import javazoom.jl.player.Player;
 
 
 /**
@@ -10,7 +15,7 @@ import javax.sound.sampled.*;
 public class GameCanvas extends Canvas {
 	MainScene scene = new MainScene();		
 			
-    public void onDraw(BufferedImage image){
+    public void onDraw(BufferedImage image){    	
         Graphics graphics = getGraphics();         
         if(graphics!=null)
             graphics.drawImage(image, 0, 0, null);
@@ -26,20 +31,31 @@ public class GameCanvas extends Canvas {
     
     }
     
-    protected void bgMusic(){
-    	try {
-			AudioInputStream audioIS = AudioSystem.getAudioInputStream(this.getClass().getResource("res/Music/bgMusic.mp3"));
-			Clip clip = AudioSystem.getClip();
-			clip.open(audioIS);
-			clip.start();
-			
-    	} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    	
-    	
-    }
+//    protected void bgMusic(){
+//    	try {
+//			FileInputStream fis = new FileInputStream("res/Music/bgMusic.mp3");
+//			Player bgplayer = new Player(fis);
+//			bgplayer.play();
+//			System.out.println("music on");
+//		} catch (Exception e) {
+//			System.out.println("bgmusic err");
+//			e.printStackTrace();
+//		}
+//    
+//    }
+//    	try {
+//			AudioInputStream audioIS = AudioSystem.getAudioInputStream(this.getClass().getResource("res/Music/bgMusic.mp3"));
+//			Clip clip = AudioSystem.getClip();
+//			clip.open(audioIS);
+//			clip.start();
+//			
+//    	} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//    	
+//    	
+    
 //    	AudioPlayer BGPlayer = AudioPlayer.player;
 //    	AudioStream BGMusic;
 //    	AudioData musicData;
