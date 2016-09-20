@@ -9,8 +9,7 @@ public class _Explosion extends Animation {
 			int frame_count) {
 		super(scene, listener, img_path, width, height, frame_count);
 		
-	}
-	
+	}	
 	
 	@Override
 	protected BufferedImage cropImage(BufferedImage src, Rectangle rect) {

@@ -91,6 +91,10 @@ public class Fighter extends Animation{
 		}		
 	}
     
-   
+    @Override
+    public Rectangle getBound() {
+		return new Rectangle((_x-28), _y, (this.get_width()-20), (this.get_height()-48));
+
+    }
 
 }

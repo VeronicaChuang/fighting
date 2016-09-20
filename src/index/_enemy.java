@@ -1,4 +1,5 @@
 package index;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -28,10 +29,10 @@ public class _enemy extends Sprite {
 			_enemy_HP = 50;
 			break;
 		case "res/enemy2.png":
-			_enemy_HP = 20;
+			_enemy_HP = 15;
 			break;
 		case "res/enemy3.png":
-			_enemy_HP = 30;
+			_enemy_HP = 25;
 			break;
 		case "res/enemy4.png":
 			_enemy_HP = 40;
@@ -99,6 +100,10 @@ public class _enemy extends Sprite {
 		alive = false; //敵機存活
 	}
 	
+	@Override
+	public Rectangle getBound() { //return bounds with some adjustment of position
+		return new Rectangle(_x, _y, (this.get_width()-33), (this.get_height()-50));
+	}
 	
 	
 }

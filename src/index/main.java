@@ -44,6 +44,7 @@ public class main extends Canvas{
         });
         _frame.addKeyListener(_main_scene);
         onUpdate();
+       
     }
 
     private static void onUpdate(){

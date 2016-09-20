@@ -43,6 +43,7 @@ public class Animation extends Sprite{
             BufferedImage stream = ImageIO.read(new File(img_path));
             int frame_width = stream.getWidth() / frame_count;
             int frame_height = stream.getHeight();
+            System.out.println("pic width: "+stream.getWidth()+" frame_width: "+frame_width+" frame_height: "+frame_height);
 
             int left =0;
             int top = 0;

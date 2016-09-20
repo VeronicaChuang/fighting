@@ -12,6 +12,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+
 import org.omg.stub.java.rmi._Remote_Stub;
 
 import index.Animation.StatusListener;
@@ -24,16 +28,17 @@ public class MainScene implements KeyListener{
     public static final int Velocity_Bullet = 7;
     public static final int Velocity_Bullet_Enemy = 3;
     public static final int Velocity_Enemy = 1;
+    
+    private static final int BulletHitEnemy = 5; //主機子彈傷害力
+    private static final int craftbump = 10; //飛機互撞扣血量
 
     private List<RenderLayer> _render_objects = new CopyOnWriteArrayList<>();
     private Insets _rect = null;
     public Insets get_rect(){return _rect;}
 
     private Fighter _fighter;
-    private _Explosion _explosion;
     private Sprite _sprite_bg1, _sprite_bg2;    
-    protected int ny2= 750;
-    private List<Integer> userKeys; //for directions    
+    protected int ny2= 750;  
     
     //background setting 
     int bg1NewY = main.WINDOWS_HEIGHT / 2;
@@ -59,6 +64,7 @@ public class MainScene implements KeyListener{
 	ArrayList<_bullet> _fighter_Missile;
 	ArrayList<_enemy> _enemyArray;
 	ArrayList<_bullet> _enemy_Millsile;
+	_Explosion _explosion = new _Explosion(this, null, "res\\explosion.png", 100, 100, 15);
 	
 	class RenderLayer{
         public Sprite Sprite;
@@ -76,15 +82,8 @@ public class MainScene implements KeyListener{
             return Sprite.hashCode();
         }
     }
-	
-	private void showExplosion(){
-		_explosion = new Fighter(this, "res\\explosion.png", 85, 55, 33);
-        SpawnFighter();
-        addToScene(_fighter);
-	}
-	
-    public MainScene() {//bg->fighter->enemy
-    	userKeys = new ArrayList<Integer>();//array for direction keys     	
+		
+    public MainScene() {//bg->fighter->enemy    	
         _rect = new Insets(0, 0, main.WINDOWS_HEIGHT, main.WINDOWS_WIDTH);
         
         //construction list
@@ -99,15 +98,13 @@ public class MainScene implements KeyListener{
         //set position and scrolling for bg1 and bg2 
         bgScrol();
      
-        _fighter = new Fighter(this, "res\\fighter.png", 85, 55, 3);
+        _fighter = new Fighter(this, "res\\fighter.png", 88, 58, 3);
         SpawnFighter();
         addToScene(_fighter);
         
         newEmemy();         
     }     
-    
-    
-        
+     
     //重置飛機位置
     private void SpawnFighter(){
         _fighter.setPosition(main.WINDOWS_WIDTH / 2, main.WINDOWS_HEIGHT - 60);
@@ -161,7 +158,6 @@ public class MainScene implements KeyListener{
     private void addToScene(Sprite sprite){
         addToScene(sprite, 0);
     }
-
    
     private void addToScene(Sprite sprite, int layer){
         _render_objects.add(new RenderLayer(sprite, layer));
@@ -179,32 +175,36 @@ public class MainScene implements KeyListener{
     	over.setPosition((main.WINDOWS_WIDTH/2), (main.WINDOWS_HEIGHT/2));
     	addToScene(over);
     }
-    
-    
+        
     public void checkCollision(){ 
     	//fighter bullet
-    	Rectangle fighterR = _fighter.getBound();         //主機
+    	Rectangle fighterR = _fighter.getBound();            //主機rec
 	    	for(int i=0; i<_fighter_Missile.size();i++){     //主機子彈
 	    		Rectangle fBullet = _fighter_Missile.get(i).getBound();
-	    		
+	    			    		
 	    		for(int j=0; j<_enemyArray.size();j++){      //敵機
 	        		Rectangle enemy= _enemyArray.get(j).getBound();
 	        		if(fBullet.intersects(enemy)){           //01-子彈打到敵機要做的事.
-	        			//TODO 01產生爆炸動畫      	        			
-	        			_explosion = new _Explosion(this, null, "res\\explosion.png", 100, 100, 33);
-	        			
-	        			
+	        			//01產生爆炸動畫      	 
 	        			_explosion.setPosition(_fighter_Missile.get(i)._x, _fighter_Missile.get(i)._y);
 	        	        addToScene(_explosion);
+	        			StatusListener listener = new StatusListener() {		
+	        				@Override
+	        				public void onCompleted(Animation animation) {
+	        					removeFromScene(_explosion);	
+	        				}
+	        			};
+	        			_explosion._listener = listener; 
 	        	        
 	        			//02我方子彈消失
 	        			_fighter_Missile.get(i).destory();
 	        			removeFromScene(_fighter_Missile.get(i));
 	        			_fighter_Missile.remove(i);
-//	        			System.out.println("_fighter_Missile: "+_fighter_Missile.size());
+	        			System.out.println("_fighter_Missile: "+_fighter_Missile.size());
+	        			
 	        			//03扣血        			
 	        			if(_enemyArray.get(j)._enemy_HP>0){        				
-	        				_enemyArray.get(j)._enemy_HP -= 5; 
+	        				_enemyArray.get(j)._enemy_HP -= BulletHitEnemy; 
 	        				System.out.println("hp: "+_enemyArray.get(j)._enemy_HP);
 	        			}
 	        			if(_enemyArray.get(j)._enemy_HP<1){
@@ -221,14 +221,23 @@ public class MainScene implements KeyListener{
 	        	}	
 	    	}
 	    	
-	    	for(int j=0; j<_enemyArray.size();j++){         //敵機
+	    	for(int j=0; j<_enemyArray.size();j++){            //敵機
 	    		Rectangle enemy= _enemyArray.get(j).getBound();    		
 		    		if(fighterR.intersects(enemy)){            //02-敵機撞我機
-		    			//TODO 01產生爆炸動畫       
-		    			
+		    			//01產生爆炸動畫     	 
+	        			_explosion.setPosition(_fighter._x, _fighter._y);
+	        	        addToScene(_explosion);
+	        			StatusListener listener = new StatusListener() {		
+	        				@Override
+	        				public void onCompleted(Animation animation) {
+	        					removeFromScene(_explosion);	
+	        				}
+	        			};
+	        			_explosion._listener = listener;	        			
+	        	
 		    			//02主機扣血
 		    			if(_fighter._fighter_HP >0){
-		    				_fighter._fighter_HP -= 10;
+		    				_fighter._fighter_HP -= craftbump; //主機被敵機撞扣血量
 //		    				System.out.println("fhp: "+_fighter._fighter_HP);
 		    			}
 		    			if(_fighter._fighter_HP <1){
@@ -243,7 +252,7 @@ public class MainScene implements KeyListener{
 		    			//03敵方扣血        
 		    			if(_enemyArray.get(j).alive){
 			    			if(_enemyArray.get(j)._enemy_HP>0){        				
-			    				_enemyArray.get(j)._enemy_HP -= 10; 
+			    				_enemyArray.get(j)._enemy_HP -= craftbump;  //敵機被主機撞扣血量
 			    				System.out.println("hp: "+_enemyArray.get(j)._enemy_HP);
 			    			}
 			    			if(_enemyArray.get(j)._enemy_HP<1){
@@ -264,8 +273,17 @@ public class MainScene implements KeyListener{
 	    		Rectangle eBullet = _enemy_Millsile.get(k).getBound();
 	    		
 	    		if(fighterR.intersects(eBullet)){         //03-敵機子彈打到我機
-	    			//TODO 01產生爆炸動畫       
-	    			
+	    			//01產生爆炸動畫       
+	    			_explosion.setPosition(_enemy_Millsile.get(k)._x, _enemy_Millsile.get(k)._y);
+        	        addToScene(_explosion);
+        			StatusListener listener = new StatusListener() {		
+        				@Override
+        				public void onCompleted(Animation animation) {
+        					removeFromScene(_explosion);	
+        				}
+        			};
+        			_explosion._listener = listener; 
+        			
 	    			//02-碰撞後子彈消失
 	    			_enemy_Millsile.get(k).destory();
         			removeFromScene(_enemy_Millsile.get(k));
@@ -273,15 +291,15 @@ public class MainScene implements KeyListener{
 	    			
 	    			//03-主機扣血
 	    			if(_fighter._fighter_HP >0){
-		    			_fighter._fighter_HP -= (int)(Math.random()*10+1);		    				
+		    			_fighter._fighter_HP -= (int)(Math.random()*10+1);	//敵機子彈傷害力	    				
 	    			}
-	    			if(_fighter._fighter_HP <1){ //TODO 畫面殘留
-	    				//敵機全部死亡	    				
+	    			if(_fighter._fighter_HP <1){ 
+	    				//敵機全部拿掉	    				
 	    				for(int t=0; t<_enemyArray.size();t++){
 	    					_enemyArray.get(t).destory();
 	    				}	
 	    				//子彈清空  場景畫面停止/清空	    				
-	    				for(int t=0; t<_enemy_Millsile.size();t++){//清子彈
+	    				for(int t=0; t<_enemy_Millsile.size();t++){
 	    					_enemy_Millsile.get(t).destory();
 	    					removeFromScene(_enemy_Millsile.get(t));
 	    					_enemy_Millsile.remove(t);
@@ -365,7 +383,7 @@ public class MainScene implements KeyListener{
 					if(fBullet.bullet_img != null){					
 						removeFromScene(fBullet);
 						_fighter_Missile.remove(fBullet);
-						checkBoundary.cancel();//cancel timer when remove bullet
+						checkBoundary.cancel();      //cancel timer when bullet removed
 	//					System.out.println("after size:"+_render_objects.size());
 					}
 				}
@@ -636,7 +654,6 @@ public class MainScene implements KeyListener{
 		checkBoundary.schedule(enemyTask, 200, 100);
 		
 		//bullet連續射擊
-		
 		Timer keepShooting = new Timer();
 		TimerTask eneShooting = new TimerTask() {			
 			@Override

@@ -1,6 +1,8 @@
 package index;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import javax.sound.sampled.*;
+
 
 /**
  * Created by matt1201 on 2016/8/7.
@@ -23,4 +25,35 @@ public class GameCanvas extends Canvas {
     	
     
     }
+    
+    protected void bgMusic(){
+    	try {
+			AudioInputStream audioIS = AudioSystem.getAudioInputStream(this.getClass().getResource("res/Music/bgMusic.mp3"));
+			Clip clip = AudioSystem.getClip();
+			clip.open(audioIS);
+			clip.start();
+			
+    	} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
+    	
+    }
+//    	AudioPlayer BGPlayer = AudioPlayer.player;
+//    	AudioStream BGMusic;
+//    	AudioData musicData;
+//    	ContinuousAudioDataStream loop =null;
+//    	
+//    	try {
+//			BGMusic = new AudioStream(new FileInputStream("res/Music/bgMusic.mp3"));
+//			musicData = BGMusic.getData();
+//			loop = new ContinuousAudioDataStream(musicData);
+//				
+//    	} catch (Exception e) {
+//			System.out.println("bg music err");
+//			e.printStackTrace();
+//		}
+//    	BGPlayer.start(loop);
+//    }
 }
