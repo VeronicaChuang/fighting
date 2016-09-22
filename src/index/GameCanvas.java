@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import javax.sound.sampled.*;
 
 import javazoom.jl.player.Player;
+import sun.nio.ch.WindowsAsynchronousChannelProvider;
 
 
 /**
@@ -14,23 +15,27 @@ import javazoom.jl.player.Player;
  */
 public class GameCanvas extends Canvas {
 	MainScene scene = new MainScene();		
-			
+	protected double FPS=0;
+	protected int Scord =0;
     public void onDraw(BufferedImage image){    	
         Graphics graphics = getGraphics();         
         if(graphics!=null)
             graphics.drawImage(image, 0, 0, null);
-
     }
-    //TODO set font in screen, bullet missing
-    protected void showTextOnScreen(){
-    	Graphics g = getGraphics();
-    	
-    	String scord="Scords: ";
-    	String fps ="FPS: "+ (int)scene.FPS;
-    	
-    
+    @Override
+    public void paint(Graphics g) {    	
+    	super.paint(g);
+		Graphics2D g2 = (Graphics2D) g;
+        g2.setColor(Color.WHITE);
+        g2.drawString("FPS: "+FPS, 100, 100);
+        g2.drawString("Scord: "+(int)Scord, 200, 200);
+//        System.out.println("PAINT");
+      
     }
     
+    public static void main(String arg[]){
+//    	new GameCanvas();
+    }
 //    protected void bgMusic(){
 //    	try {
 //			FileInputStream fis = new FileInputStream("res/Music/bgMusic.mp3");

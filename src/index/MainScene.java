@@ -58,15 +58,21 @@ public class MainScene implements KeyListener{
 	Font font = new Font("Helvetica", Font.BOLD, 16);
 	String fpsInfo ="";
 	protected int scord=0;
-	boolean isgameOver =false;
-	
+	boolean isgameOver =false;	
 	
 	//collision detected
-	int _fighter_HP = 100;
 	ArrayList<_bullet> _fighter_Missile;
 	ArrayList<_enemy> _enemyArray;
 	ArrayList<_bullet> _enemy_Millsile;
 	_Explosion _explosion = new _Explosion(this, null, "res\\explosion.png", 100, 100, 15);
+	
+	//hpbar
+	protected Sprite hpBarBG = new Sprite(this,"res\\hp_bg.png",100,10);
+	protected Sprite hpBarLive = new Sprite(this,"res\\hp_value.png", 100, 10);
+	
+	//bullet time check
+	double old=0;
+	double pass = 500;
 	
 	class RenderLayer{
         public Sprite Sprite;
@@ -106,11 +112,13 @@ public class MainScene implements KeyListener{
         addToScene(_fighter);
         
         newEmemy();    
+       
     }     
      
     //重置飛機位置
     private void SpawnFighter(){
         _fighter.setPosition(main.WINDOWS_WIDTH / 2, main.WINDOWS_HEIGHT - 60);
+      
     }
 
     //更新畫面
@@ -133,6 +141,7 @@ public class MainScene implements KeyListener{
     //更新
     public void update(){      	
 	    updateFrame();
+	    fighterHPBar();//秀血條
 	        if(_fighter.isfighterAlive){//fighter還活著才繼續
 		        _fighter.move(); 
 	        	checkCollision();
@@ -144,7 +153,7 @@ public class MainScene implements KeyListener{
 		        	FPS=((double)frames/(double)(getStartTime-lastTime))*1000;
 		        	lastTime = getStartTime;
 		        	frames =0;
-		//        	System.out.println("FPS: "+(int)FPS);
+//		        	System.out.println("FPS: "+(int)FPS);
 		        }
 	        }
 //        System.out.println(frames ++ +" ,getStartTime: "+getStartTime);
@@ -179,7 +188,7 @@ public class MainScene implements KeyListener{
     	addToScene(over);
     }
         
-    public void checkCollision(){ 
+    protected void checkCollision(){ 
     	//fighter bullet
     	Rectangle fighterR = _fighter.getBound();            //主機rec
 	    	for(int i=0; i<_fighter_Missile.size();i++){     //主機子彈
@@ -314,10 +323,32 @@ public class MainScene implements KeyListener{
 	    		}
 	    	}
 //	    	System.out.println("FPS: "+ FPS + "Scords: "+ scord);
+//	    	System.out.println("colli hp: "+_fighter._fighter_HP);
     }
     
+    
+    //血條
+    protected void fighterHPBar(){    			
+    	hpBarBG.setPosition(_fighter._x, _fighter._y+30);    	
+    	hpBarLive.setPosition(_fighter._x, _fighter._y+30);
+    	
+    	//resize according with fighter hp
+    	hpBarLive.setWidth(_fighter._fighter_HP); 
+    	
+    	//fix green bar position on the left
+    	hpBarLive.setPosition((hpBarBG._x-((100-_fighter._fighter_HP)/2+1)),_fighter._y+30);
+    	
+//    	System.out.println("new bar width: "+ hpBarLive.get_width());
+    	addToScene(hpBarBG);
+    	addToScene(hpBarLive);
+    	
+    	if(hpBarLive.get_width()<=0){// if fighter dead, remove hp bars
+    		removeFromScene(hpBarBG);
+    		removeFromScene(hpBarLive);
+    	}
+    }
+
     //TODO FPS與分數(打敵機的分數計算)
-    //TODO 血條
     //TODO 背景音樂    
     
     
@@ -371,30 +402,40 @@ public class MainScene implements KeyListener{
 	protected void SpawnBullet(){    	
     //new bullet
 		if(_fighter.isfighterAlive){
-	    	_bullet fBullet = new _bullet(this, "res\\bullet.png", 12, 16);
-	    	fBullet.setPosition(_fighter._x, _fighter._y);
-	    	addToScene(fBullet);
-	    	_fighter_Missile.add(fBullet); //array for collision
-	//    	System.out.println("fBullet: "+_fighter_Missile.size());
-	//    	System.out.println("begin size:"+_render_objects.size());
-	    	
-	    //check if bullet out of boundary
-	    	Timer checkBoundary = new Timer();
-	    	TimerTask bulletTask = new TimerTask() {
-				@Override
-				public void run() {
-					if(fBullet.bullet_img != null){					
-						removeFromScene(fBullet);
-						_fighter_Missile.remove(fBullet);
-						checkBoundary.cancel();      //cancel timer when bullet removed
-	//					System.out.println("after size:"+_render_objects.size());
+			double a1 = System.currentTimeMillis();
+			System.out.println("a1 -01 "+a1);
+	    	System.out.println("old-01 "+old);
+	    	System.out.println("pass01 "+pass);
+//	    	if(pass>=490){
+				_bullet fBullet = new _bullet(this, "res\\bullet.png", 12, 16);
+		    	fBullet.setPosition(_fighter._x, _fighter._y);
+		    	addToScene(fBullet);
+		    	pass = a1-old;
+		    	old =a1;//現在時間給old
+		    	System.out.println("pass-02 "+pass);//距離上次發射時間
+		    	
+		    	_fighter_Missile.add(fBullet); //array for collision
+		    	
+		    //check if bullet out of boundary
+		    	Timer checkBoundary = new Timer();
+		    	TimerTask bulletTask = new TimerTask() {
+					@Override
+					public void run() {
+						if(fBullet.bullet_img != null){					
+							removeFromScene(fBullet);
+							_fighter_Missile.remove(fBullet);
+							checkBoundary.cancel();      //cancel timer when bullet removed
+		//					System.out.println("after size:"+_render_objects.size());
+						}
 					}
-				}
-			};
-			checkBoundary.schedule(bulletTask, 200, 100);
-	//    	System.out.println("mainScene hashcode: "+fBullet.hashCode());
+				};
+				checkBoundary.schedule(bulletTask, 200, 100);
+		//    	System.out.println("mainScene hashcode: "+fBullet.hashCode());
+//			}else{
+//				pass =500;
+//		}
 		}
-    }
+	}
 
 	protected void newEmemy(){	 
 		Timer _new_enemy = new Timer();		

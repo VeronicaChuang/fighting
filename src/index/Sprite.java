@@ -61,4 +61,11 @@ public class Sprite {
     public Rectangle getBound(){
     	return new Rectangle(_x, _y, _width, _height);
     }
+    
+    protected void setWidth(int w){
+    	_width = w;
+    	if(_width<0){
+    		_width =0;
+    	}
+    }
 }

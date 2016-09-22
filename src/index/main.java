@@ -1,6 +1,8 @@
 package index;
 import javax.swing.*;
 
+import org.omg.PortableServer.ServantLocatorOperations;
+
 import javazoom.jl.player.Player;
 
 import java.awt.*;
@@ -29,13 +31,22 @@ public class main extends Canvas{
     private static List<Sprite> _images = new LinkedList<>();
     private static MainScene _main_scene = new MainScene();
     public static int moveVerti = 0, moveHoriz = 0;
-   
+       
+//   @Override
+//	public void paint(Graphics g) {
+//		super.paint(g);
+//		Graphics2D g2 = (Graphics2D) g;
+//        g2.setColor(Color.WHITE);
+//        g2.drawString("Scord: "+_main_scene.scord, 100, 100);
+//        g2.drawString("FPS: "+(int)_main_scene.FPS, 200, 200);
+//        System.out.println("PAINT "+_main_scene.FPS);
+//	}
 
     public static void main(String[] args){
         int borderWidth_bar = 40;
-        int borderWidth_side = 10;
-        _frame.setSize(WINDOWS_WIDTH+borderWidth_side, WINDOWS_HEIGHT+borderWidth_bar);
-        _frame.add(_canvas, BorderLayout.CENTER);
+        int borderWidth_side = 10;            
+        _frame.setSize(WINDOWS_WIDTH+borderWidth_side, WINDOWS_HEIGHT+borderWidth_bar);             
+        _frame.add(_canvas, BorderLayout.CENTER);       
         _frame.setVisible(true);  
         _frame.addWindowListener(new WindowAdapter(){
             public void windowClosing(WindowEvent e){
@@ -44,8 +55,10 @@ public class main extends Canvas{
                     System.exit(0);
             }
         });
-        _frame.addKeyListener(_main_scene);
+       
+        _frame.addKeyListener(_main_scene);  
         onUpdate();
+       
     }
 
     private static void onUpdate(){ 
@@ -78,8 +91,9 @@ public class main extends Canvas{
             _image_graphics.drawImage(_images.get(i).getImg(), _images.get(i).get_x() - offset_x, _images.get(i).get_y() - offset_y,
                     _images.get(i).get_width(), _images.get(i).get_height(), null);
         }
-
+       
         _canvas.onDraw(_render_image);
+        _canvas.paint(_image_graphics);
     }
  
     
