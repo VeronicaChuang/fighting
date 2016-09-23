@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.sql.Time;
 import java.util.*;
@@ -74,6 +75,13 @@ public class MainScene implements KeyListener{
 	double old=0;
 	double pass = 500;
 	
+	//show Scores
+	protected _showText scores;
+	
+	//music
+	music playMusic = new music();
+	
+	
 	class RenderLayer{
         public Sprite Sprite;
         public int Layer;
@@ -95,6 +103,8 @@ public class MainScene implements KeyListener{
     	
         _rect = new Insets(0, 0, main.WINDOWS_HEIGHT, main.WINDOWS_WIDTH);
         
+      
+        
         //construction list
         _fighter_Missile = new ArrayList<>();
     	_enemyArray = new ArrayList<>();
@@ -112,6 +122,10 @@ public class MainScene implements KeyListener{
         addToScene(_fighter);
         
         newEmemy();    
+        
+    	addToScene(hpBarBG);
+    	addToScene(hpBarLive);
+       
        
     }     
      
@@ -139,9 +153,11 @@ public class MainScene implements KeyListener{
     }
 
     //更新
-    public void update(){      	
+    public void update(){  
+//    	System.out.println("size: "+_render_objects.size());
 	    updateFrame();
 	    fighterHPBar();//秀血條
+	    showscore();//秀成績
 	        if(_fighter.isfighterAlive){//fighter還活著才繼續
 		        _fighter.move(); 
 	        	checkCollision();
@@ -153,7 +169,7 @@ public class MainScene implements KeyListener{
 		        	FPS=((double)frames/(double)(getStartTime-lastTime))*1000;
 		        	lastTime = getStartTime;
 		        	frames =0;
-//		        	System.out.println("FPS: "+(int)FPS);
+		        	System.out.println("FPS: "+(int)FPS);
 		        }
 	        }
 //        System.out.println(frames ++ +" ,getStartTime: "+getStartTime);
@@ -182,6 +198,9 @@ public class MainScene implements KeyListener{
     	removeFromScene(_fighter);
     	_render_objects.clear();    	
     	
+    	playMusic.menuMusic();
+    	playMusic.bgPlay();
+    	
     	//show game over
     	Sprite over = new Sprite(this, "res\\gameOver.png", 320, 90);
     	over.setPosition((main.WINDOWS_WIDTH/2), (main.WINDOWS_HEIGHT/2));
@@ -207,6 +226,9 @@ public class MainScene implements KeyListener{
 	        				}
 	        			};
 	        			_explosion._listener = listener; 
+	        			
+	        			//01-2 音效
+	        			playMusic.explosionMusic();
 	        	        
 	        			//02我方子彈消失
 	        			_fighter_Missile.get(i).destory();
@@ -227,6 +249,9 @@ public class MainScene implements KeyListener{
 	        				_enemyArray.get(j).destory();
 	        				removeFromScene(_enemyArray.get(j));
 	        				_enemyArray.remove(j);
+	        				
+	        				//音效
+		        			playMusic.enemyCrashMusic();
 	        			}
 //	        			System.out.println("eme num: "+_enemyArray.size());
 	        		}  
@@ -247,6 +272,9 @@ public class MainScene implements KeyListener{
 	        			};
 	        			_explosion._listener = listener;	        			
 	        	
+	        			//01-2 音效
+	        			playMusic.explosionMusic();
+	        			
 		    			//02主機扣血
 		    			if(_fighter._fighter_HP >0){
 		    				_fighter._fighter_HP -= craftbump; //主機被敵機撞扣血量
@@ -275,6 +303,9 @@ public class MainScene implements KeyListener{
 			    				_enemyArray.get(j).destory();
 			    				removeFromScene(_enemyArray.get(j));
 			    				_enemyArray.remove(j);
+			    				
+			    				//音效
+			        			playMusic.enemyCrashMusic();
 			    			}
 		    			}
 //		    			System.out.println("eme num: "+_enemyArray.size());
@@ -295,6 +326,9 @@ public class MainScene implements KeyListener{
         				}
         			};
         			_explosion._listener = listener; 
+        			
+        			//01-2 音效
+        			playMusic.explosionMusic();
         			
 	    			//02-碰撞後子彈消失
 	    			_enemy_Millsile.get(k).destory();
@@ -339,8 +373,7 @@ public class MainScene implements KeyListener{
     	hpBarLive.setPosition((hpBarBG._x-((100-_fighter._fighter_HP)/2+1)),_fighter._y+30);
     	
 //    	System.out.println("new bar width: "+ hpBarLive.get_width());
-    	addToScene(hpBarBG);
-    	addToScene(hpBarLive);
+
     	
     	if(hpBarLive.get_width()<=0){// if fighter dead, remove hp bars
     		removeFromScene(hpBarBG);
@@ -349,6 +382,15 @@ public class MainScene implements KeyListener{
     }
 
     //TODO FPS與分數(打敵機的分數計算)
+    protected void showscore(){
+//    	System.out.println("score");
+//    	BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
+//    	scores = new _showText(this,img,100,100);
+//    	scores.setString("Scores: ");
+//    	scores.setPosition(100, 100);
+//    	addToScene(scores);
+    }
+    
     //TODO 背景音樂    
     
     
@@ -403,18 +445,21 @@ public class MainScene implements KeyListener{
     //new bullet
 		if(_fighter.isfighterAlive){
 			double a1 = System.currentTimeMillis();
-			System.out.println("a1 -01 "+a1);
-	    	System.out.println("old-01 "+old);
-	    	System.out.println("pass01 "+pass);
+//			System.out.println("a1 -01 "+a1);
+//	    	System.out.println("old-01 "+old);
+//	    	System.out.println("pass01 "+pass);
 //	    	if(pass>=490){
 				_bullet fBullet = new _bullet(this, "res\\bullet.png", 12, 16);
 		    	fBullet.setPosition(_fighter._x, _fighter._y);
 		    	addToScene(fBullet);
 		    	pass = a1-old;
 		    	old =a1;//現在時間給old
-		    	System.out.println("pass-02 "+pass);//距離上次發射時間
+//		    	System.out.println("pass-02 "+pass);//距離上次發射時間
 		    	
 		    	_fighter_Missile.add(fBullet); //array for collision
+		    	
+		    	//01-2 音效
+    			playMusic.fighterFireMusic();
 		    	
 		    //check if bullet out of boundary
 		    	Timer checkBoundary = new Timer();

@@ -1,46 +1,57 @@
 package index;
 
-import java.io.FileInputStream;
-
-import javazoom.jl.player.Player;
-import javazoom.jl.player.advanced.AdvancedPlayer;
-import javazoom.jl.player.advanced.PlaybackEvent;
-import javazoom.jl.player.advanced.PlaybackListener;
+import java.nio.file.Paths;
+import javafx.embed.swing.JFXPanel;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.util.Duration;
 
 public class music {
-	int i =0;
-	public music(){
-		System.out.println(i++);
-		bgMusic();
-	}
+	protected MediaPlayer BGmediaPlayer;
+	protected boolean stop=false;
+	
+	public music(){}
 	
 	protected void bgMusic(){
     	try {
-			FileInputStream fis = new FileInputStream("res/Music/bgMusic.mp3");
-			AdvancedPlayer bgplayer = new AdvancedPlayer (fis);
-			System.out.println("player before");
-			bgplayer.play();
-			System.out.println("music over");
+    		 new JFXPanel();//    		 
+	         Media hit = new Media(Paths.get("res/Music/bgMusic.mp3").toUri().toString());
+	         BGmediaPlayer = new MediaPlayer(hit);
+	         BGmediaPlayer.setOnEndOfMedia(new Runnable() {
+				@Override
+				public void run() {
+					BGmediaPlayer.seek(Duration.ZERO);//duration zero, playback music	
+				}
+			});
 		} catch (Exception e) {
 			System.out.println("bgmusic err");
 			e.printStackTrace();
 		}
     
     }
+	
+	protected void bgPlay(){
+		if(BGmediaPlayer != null){
+			   BGmediaPlayer.stop();	//TODO BG music can't stop 
+		}
+		   BGmediaPlayer.setVolume(1.2);	
+		   BGmediaPlayer.play();	
+	}
+	
+	protected void bgStop(){
+		System.out.println("stop");
+		BGmediaPlayer.stop();	//TODO BG music can't stop 
+	}
+	
+	
 	protected void explosionMusic(){
 		try {
-			FileInputStream fis = new FileInputStream("res/Music/explodeEffect.mp3");
-			AdvancedPlayer bgplayer = new AdvancedPlayer (fis);
-			bgplayer.setPlayBackListener(new PlaybackListener() {
-				@Override
-				public void playbackFinished(PlaybackEvent arg0) {
-					// TODO Auto-generated method stub
-					super.playbackFinished(arg0);
-				}
-			});
+			new JFXPanel();//    		 
+	        Media hit = new Media(Paths.get("res/Music/explodeEffect.mp3").toUri().toString());
+	        MediaPlayer mediaPlayer = new MediaPlayer(hit);
+	        mediaPlayer.setVolume(0.6);
+	        mediaPlayer.play();
 			
-			bgplayer.play();
-			System.out.println("music over");
 		} catch (Exception e) {
 			System.out.println("bgmusic err");
 			e.printStackTrace();
@@ -49,39 +60,40 @@ public class music {
 	
 	protected void fighterFireMusic(){
 		try {
-			FileInputStream fis = new FileInputStream("res/Music/fireEffect.mp3");
-			AdvancedPlayer bgplayer = new AdvancedPlayer (fis);
-			System.out.println("player before");
-			bgplayer.play();
-			System.out.println("music over");
+			new JFXPanel();//    		 
+	        Media hit = new Media(Paths.get("res/Music/fireEffect.mp3").toUri().toString());
+	        MediaPlayer mediaPlayer = new MediaPlayer(hit);
+	        mediaPlayer.setVolume(0.6);
+	        mediaPlayer.play();
+			
 		} catch (Exception e) {
-			System.out.println("bgmusic err");
+			System.out.println("fighterFireMusic err");
 			e.printStackTrace();
 		}
 	}
 	
 	protected void enemyCrashMusic(){
 		try {
-			FileInputStream fis = new FileInputStream("res/Music/shipDestroyEffect.mp3");
-			AdvancedPlayer bgplayer = new AdvancedPlayer (fis);
-			System.out.println("player before");
-			bgplayer.play();
-			System.out.println("music over");
+			new JFXPanel();//    		 
+	        Media hit = new Media(Paths.get("res/Music/shipDestroyEffect.mp3").toUri().toString());
+	        MediaPlayer mediaPlayer = new MediaPlayer(hit);
+	        mediaPlayer.setVolume(0.3);
+	        mediaPlayer.play();
+			
 		} catch (Exception e) {
-			System.out.println("bgmusic err");
+			System.out.println("enemycrashMusic err");
 			e.printStackTrace();
 		}
 	}
 	
 	protected void menuMusic(){
 		try {
-			FileInputStream fis = new FileInputStream("res/Music/mainMainMusic.mp3");
-			AdvancedPlayer bgplayer = new AdvancedPlayer (fis);
-			System.out.println("player before");
-			bgplayer.play();
-			System.out.println("music over");
+			new JFXPanel();//    		 
+	        Media hit = new Media(Paths.get("res/Music/mainMainMusic.mp3").toUri().toString());	       
+	        BGmediaPlayer = new MediaPlayer(hit);
+			
 		} catch (Exception e) {
-			System.out.println("bgmusic err");
+			System.out.println("menuMusic err");
 			e.printStackTrace();
 		}
 	}

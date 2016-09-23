@@ -3,6 +3,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.sound.sampled.*;
 
@@ -14,28 +16,40 @@ import sun.nio.ch.WindowsAsynchronousChannelProvider;
  * Created by matt1201 on 2016/8/7.
  */
 public class GameCanvas extends Canvas {
-	MainScene scene = new MainScene();		
+	MainScene scene = new MainScene();	
+	
 	protected double FPS=0;
 	protected int Scord =0;
-    public void onDraw(BufferedImage image){    	
+	
+	//play bg music
+	protected music playmusic = new music();
+	protected boolean stop =false;
+	
+	public GameCanvas(){
+		
+		playmusic.bgMusic();
+		playmusic.bgPlay();
+		
+	}
+	
+	
+	//use timerTask to control bullet move
+		class _fighterBulletTask extends TimerTask{
+			@Override
+			public void run() {
+						
+			}		
+		}
+	
+	
+    public void onDraw(BufferedImage image){ 
         Graphics graphics = getGraphics();         
         if(graphics!=null)
             graphics.drawImage(image, 0, 0, null);
     }
-    @Override
-    public void paint(Graphics g) {    	
-    	super.paint(g);
-		Graphics2D g2 = (Graphics2D) g;
-        g2.setColor(Color.WHITE);
-        g2.drawString("FPS: "+FPS, 100, 100);
-        g2.drawString("Scord: "+(int)Scord, 200, 200);
-//        System.out.println("PAINT");
-      
-    }
+
     
-    public static void main(String arg[]){
-//    	new GameCanvas();
-    }
+   
 //    protected void bgMusic(){
 //    	try {
 //			FileInputStream fis = new FileInputStream("res/Music/bgMusic.mp3");
@@ -78,3 +92,5 @@ public class GameCanvas extends Canvas {
 //    	BGPlayer.start(loop);
 //    }
 }
+
+

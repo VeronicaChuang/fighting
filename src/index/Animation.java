@@ -43,7 +43,7 @@ public class Animation extends Sprite{
             BufferedImage stream = ImageIO.read(new File(img_path));
             int frame_width = stream.getWidth() / frame_count;
             int frame_height = stream.getHeight();
-            System.out.println("pic width: "+stream.getWidth()+" frame_width: "+frame_width+" frame_height: "+frame_height);
+//            System.out.println("pic width: "+stream.getWidth()+" frame_width: "+frame_width+" frame_height: "+frame_height);
 
             int left =0;
             int top = 0;
@@ -52,6 +52,7 @@ public class Animation extends Sprite{
                 left+=frame_width;
                 _frames.add(new Sprite(scene, img_frame, width, height));
             }
+            //子彈連發有間距
 //            if(top<=300){
 //            	if(!img_path.equals("res\\explosion.png")){
 //		            for(int i=0; i<frame_count; i++) {//把連圖剪成一個一個圖

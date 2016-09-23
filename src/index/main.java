@@ -3,6 +3,8 @@ import javax.swing.*;
 
 import org.omg.PortableServer.ServantLocatorOperations;
 
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javazoom.jl.player.Player;
 
 import java.awt.*;
@@ -31,23 +33,24 @@ public class main extends Canvas{
     private static List<Sprite> _images = new LinkedList<>();
     private static MainScene _main_scene = new MainScene();
     public static int moveVerti = 0, moveHoriz = 0;
-       
-//   @Override
-//	public void paint(Graphics g) {
-//		super.paint(g);
-//		Graphics2D g2 = (Graphics2D) g;
-//        g2.setColor(Color.WHITE);
-//        g2.drawString("Scord: "+_main_scene.scord, 100, 100);
-//        g2.drawString("FPS: "+(int)_main_scene.FPS, 200, 200);
-//        System.out.println("PAINT "+_main_scene.FPS);
-//	}
-
+   
+    
     public static void main(String[] args){
+//    	JLabel showText = new JLabel();
+//    	showText.setSize(100,100);
+//        showText.setLocation(50,50 );
+//    	showText.setOpaque(true);
+//    	showText.setBackground(new Color(0, 0, 0, 1)); 
+//    	showText.setText("test");
+//    	_frame.add(showText);
+    	
         int borderWidth_bar = 40;
-        int borderWidth_side = 10;            
+        int borderWidth_side = 10;  
         _frame.setSize(WINDOWS_WIDTH+borderWidth_side, WINDOWS_HEIGHT+borderWidth_bar);             
-        _frame.add(_canvas, BorderLayout.CENTER);       
+        
+        _frame.add(_canvas);  
         _frame.setVisible(true);  
+        
         _frame.addWindowListener(new WindowAdapter(){
             public void windowClosing(WindowEvent e){
                 int i= JOptionPane.showConfirmDialog(null, "exit application?");
@@ -58,6 +61,13 @@ public class main extends Canvas{
        
         _frame.addKeyListener(_main_scene);  
         onUpdate();
+        
+//        String bip = "res/Music/bgMusic.mp3";
+//        Media hit = new Media(bip);
+//        MediaPlayer mediaPlayer = new MediaPlayer(hit);
+//        mediaPlayer.play();
+        
+     
        
     }
 
@@ -93,7 +103,6 @@ public class main extends Canvas{
         }
        
         _canvas.onDraw(_render_image);
-        _canvas.paint(_image_graphics);
     }
  
     
