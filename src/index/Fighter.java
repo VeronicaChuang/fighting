@@ -22,7 +22,7 @@ public class Fighter extends Animation{
     public void move(){
     	if(isfighterAlive){
 	    	if(dx == -MainScene.Velocity_Fighter){//往左走
-	    		if((this._x-45)<=0){
+	    		if((this._x-45-6)<=0){//-6為血條超出主機的寬度(12/2)
 	    			dx =0;
 	    			this._x +=dx;
 	    		}else{
@@ -31,7 +31,7 @@ public class Fighter extends Animation{
 	    	}
 	    
 	    	if(dx == MainScene.Velocity_Fighter){ //往右走
-		    	if((this._x+45) >main.WINDOWS_WIDTH){//不超過右牆	    		
+		    	if((this._x+45+12) >main.WINDOWS_WIDTH){//不超過右牆	//-6為血條超出主機的寬度(12/2) 		
 		    			dx = 0;
 		    			this._x +=dx;
 		    	}else{	    			
@@ -49,7 +49,7 @@ public class Fighter extends Animation{
 	    	}
 	    	
 	    	if(dy == MainScene.Velocity_Fighter){//往下走
-	    		if((this._y+35)>=main.WINDOWS_HEIGHT){
+	    		if((this._y+50)>=main.WINDOWS_HEIGHT){//主角圖片離邊界長度+血調位置+長度
 	    			dy =0;
 	    			this._y +=dy;
 	    		}else{

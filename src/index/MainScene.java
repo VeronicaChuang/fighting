@@ -33,6 +33,9 @@ public class MainScene implements KeyListener{
     
     private static final int BulletHitEnemy = 5; //主機子彈傷害力
     private static final int craftbump = 10; //飛機互撞扣血量
+    
+
+
 
     private List<RenderLayer> _render_objects = new CopyOnWriteArrayList<>();
     private Insets _rect = null;
@@ -67,15 +70,15 @@ public class MainScene implements KeyListener{
 	_Explosion _explosion = new _Explosion(this, null, "res\\explosion.png", 100, 100, 15);
 	
 	//hpbar
-	protected Sprite hpBarBG = new Sprite(this,"res\\hp_bg.png",100,10);
-	protected Sprite hpBarLive = new Sprite(this,"res\\hp_value.png", 100, 10);
+	protected Sprite hpBarBG = new Sprite(this,"res\\hp_bg.png",100,5);
+	protected Sprite hpBarLive = new Sprite(this,"res\\hp_value.png", 100, 5);
 	
 	//bullet time check
 	double old=0;
 	double pass = 500;
 	
 	//show Scores
-	protected _showText scores;
+//	protected _showText scores = new _showText(this,new BufferedImage(50, 50, BufferedImage.TYPE_INT_ARGB),100,100);
 	
 	//music
 	music playMusic = new music();
@@ -101,8 +104,6 @@ public class MainScene implements KeyListener{
     public MainScene() {//bg->fighter->enemy   
     	
         _rect = new Insets(0, 0, main.WINDOWS_HEIGHT, main.WINDOWS_WIDTH);
-        
-      
         
         //construction list
         _fighter_Missile = new ArrayList<>();
@@ -360,17 +361,19 @@ public class MainScene implements KeyListener{
     }
     
     
-    //血條
+    //血條 TODO FIX 血條
     protected void fighterHPBar(){    			
-    	hpBarBG.setPosition(_fighter._x, _fighter._y+30);    	
-    	hpBarLive.setPosition(_fighter._x, _fighter._y+30);
+    	hpBarBG.setPosition(_fighter._x, _fighter._y+main.HP_Position);    	
+    	hpBarLive.setPosition(_fighter._x, _fighter._y+main.HP_Position);
     	
     	//resize according with fighter hp
     	hpBarLive.setWidth(_fighter._fighter_HP); 
     	
     	//fix green bar position on the left
-    	hpBarLive.setPosition((hpBarBG._x-((100-_fighter._fighter_HP)/2+1)),_fighter._y+30);
-    	
+//    	hpBarLive.setPosition((hpBarBG._x-((100-_fighter._fighter_HP)/2+1)),_fighter._y+30);
+    	if(_fighter._fighter_HP!=100){
+    		hpBarLive.setPosition((hpBarBG._x-((100-_fighter._fighter_HP)/2+1)),_fighter._y+30);
+    	}
 //    	System.out.println("new bar width: "+ hpBarLive.get_width());
 
     	
@@ -382,9 +385,8 @@ public class MainScene implements KeyListener{
 
     //TODO FPS與分數(打敵機的分數計算)
     protected void showscore(){
-//    	System.out.println("score");
-//    	BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
-//    	scores = new _showText(this,img,100,100);
+//    	scores.setPosition(main.WINDOWS_WIDTH/2, main.WINDOWS_HEIGHT/2);
+//    	addToScene(scores);
 //    	scores.setString("Scores: ");
 //    	scores.setPosition(100, 100);
 //    	addToScene(scores);

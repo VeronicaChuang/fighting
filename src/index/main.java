@@ -23,6 +23,7 @@ import java.util.List;
 public class main extends Canvas{
     public static final int WINDOWS_WIDTH = 431;
     public static final int WINDOWS_HEIGHT = 768;
+    public static final int HP_Position = 30;
 
     private static Frame _frame = new Frame("exercise");
     private static GameCanvas _canvas = new GameCanvas();
