@@ -5,7 +5,6 @@ import org.omg.PortableServer.ServantLocatorOperations;
 
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import javazoom.jl.player.Player;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -61,13 +60,6 @@ public class main extends Canvas{
        
         _frame.addKeyListener(_main_scene);  
         onUpdate();
-        
-//        String bip = "res/Music/bgMusic.mp3";
-//        Media hit = new Media(bip);
-//        MediaPlayer mediaPlayer = new MediaPlayer(hit);
-//        mediaPlayer.play();
-        
-     
        
     }
 
