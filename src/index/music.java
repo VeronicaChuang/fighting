@@ -35,7 +35,7 @@ public class music {
 			   BGmediaPlayer.stop();	//TODO BG music can't stop 
 		}
 		   BGmediaPlayer.setVolume(1.2);	
-		   BGmediaPlayer.play();	
+//		   BGmediaPlayer.play();	
 	}
 	
 	protected void bgStop(){
@@ -50,7 +50,7 @@ public class music {
 	        Media hit = new Media(Paths.get("res/Music/explodeEffect.mp3").toUri().toString());
 	        MediaPlayer mediaPlayer = new MediaPlayer(hit);
 	        mediaPlayer.setVolume(0.6);
-	        mediaPlayer.play();
+//	        mediaPlayer.play();
 			
 		} catch (Exception e) {
 			System.out.println("bgmusic err");
@@ -64,7 +64,7 @@ public class music {
 	        Media hit = new Media(Paths.get("res/Music/fireEffect.mp3").toUri().toString());
 	        MediaPlayer mediaPlayer = new MediaPlayer(hit);
 	        mediaPlayer.setVolume(0.6);
-	        mediaPlayer.play();
+//	        mediaPlayer.play();
 			
 		} catch (Exception e) {
 			System.out.println("fighterFireMusic err");
@@ -78,7 +78,7 @@ public class music {
 	        Media hit = new Media(Paths.get("res/Music/shipDestroyEffect.mp3").toUri().toString());
 	        MediaPlayer mediaPlayer = new MediaPlayer(hit);
 	        mediaPlayer.setVolume(0.3);
-	        mediaPlayer.play();
+//	        mediaPlayer.play();
 			
 		} catch (Exception e) {
 			System.out.println("enemycrashMusic err");

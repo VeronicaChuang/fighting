@@ -26,16 +26,16 @@ public class _enemy extends Sprite {
 		
 		switch(img_path){//給敵機不同血量
 		case "res/enemy1.png":
-			_enemy_HP = 50;
+			_enemy_HP = 40;
 			break;
 		case "res/enemy2.png":
-			_enemy_HP = 15;
+			_enemy_HP = 10;
 			break;
 		case "res/enemy3.png":
 			_enemy_HP = 25;
 			break;
 		case "res/enemy4.png":
-			_enemy_HP = 40;
+			_enemy_HP = 25;
 			break;
 		}
 	}

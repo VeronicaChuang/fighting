@@ -36,20 +36,13 @@ public class main extends Canvas{
    
     
     public static void main(String[] args){
-//    	JLabel showText = new JLabel();
-//    	showText.setSize(100,100);
-//        showText.setLocation(50,50 );
-//    	showText.setOpaque(true);
-//    	showText.setBackground(new Color(0, 0, 0, 1)); 
-//    	showText.setText("test");
-//    	_frame.add(showText);
     	
-        int borderWidth_bar = 40;
-        int borderWidth_side = 10;  
-        _frame.setSize(WINDOWS_WIDTH+borderWidth_side, WINDOWS_HEIGHT+borderWidth_bar);             
-        
-        _frame.add(_canvas);  
-        _frame.setVisible(true);  
+        int borderWidth_bar = 10;
+        int borderWidth_side = 5;  
+        _frame.setSize(WINDOWS_WIDTH+borderWidth_side, WINDOWS_HEIGHT+borderWidth_bar);
+        _frame.add(_canvas, BorderLayout.CENTER);
+        _frame.setVisible(true);
+        _frame.setResizable(false);
         
         _frame.addWindowListener(new WindowAdapter(){
             public void windowClosing(WindowEvent e){

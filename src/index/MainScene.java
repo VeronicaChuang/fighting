@@ -34,9 +34,6 @@ public class MainScene implements KeyListener{
     private static final int BulletHitEnemy = 5; //主機子彈傷害力
     private static final int craftbump = 10; //飛機互撞扣血量
     
-
-
-
     private List<RenderLayer> _render_objects = new CopyOnWriteArrayList<>();
     private Insets _rect = null;
     public Insets get_rect(){return _rect;}
@@ -78,11 +75,12 @@ public class MainScene implements KeyListener{
 	double pass = 500;
 	
 	//show Scores
-//	protected _showText scores = new _showText(this,new BufferedImage(50, 50, BufferedImage.TYPE_INT_ARGB),100,100);
+	private _showText showScord;
+	private _showFPS giveFPS;
 	
 	//music
 	music playMusic = new music();
-	
+	int i =0;
 	
 	class RenderLayer{
         public Sprite Sprite;
@@ -125,8 +123,19 @@ public class MainScene implements KeyListener{
         
     	addToScene(hpBarBG);
     	addToScene(hpBarLive);
-       
-       
+    	
+    	//new scord text
+    	showScord = new _showText(this, 150, 100); //int width, int height
+    	showScord.setPosition(80, 30);
+    	showScord.setScore(0);//呼叫setString才會用graphic畫出
+    	addToScene(showScord);
+    	
+    	//show fps
+    	
+    	giveFPS = new _showFPS(this, 150, 100); //int width, int height
+    	giveFPS.setPosition(80, 55);
+    	giveFPS.setFPS("");//呼叫setString才會將問劑用graphic畫出
+    	addToScene(giveFPS);
     }     
      
     //重置飛機位置
@@ -157,7 +166,8 @@ public class MainScene implements KeyListener{
 //    	System.out.println("size: "+_render_objects.size());
 	    updateFrame();
 	    fighterHPBar();//秀血條
-	    showscore();//秀成績
+//	    showScord.setScore(scord);//show scord
+//	    System.out.println(scord);
 	        if(_fighter.isfighterAlive){//fighter還活著才繼續
 		        _fighter.move(); 
 	        	checkCollision();
@@ -244,6 +254,7 @@ public class MainScene implements KeyListener{
 	        			if(_enemyArray.get(j)._enemy_HP<1){
 	        				//給分數
 	        				scord += 18;
+	        				showScord.setScore(scord);//show scord
 	        				
 	        				//移除死機
 	        				_enemyArray.get(j).destory();
@@ -384,13 +395,7 @@ public class MainScene implements KeyListener{
     }
 
     //TODO FPS與分數(打敵機的分數計算)
-    protected void showscore(){
-//    	scores.setPosition(main.WINDOWS_WIDTH/2, main.WINDOWS_HEIGHT/2);
-//    	addToScene(scores);
-//    	scores.setString("Scores: ");
-//    	scores.setPosition(100, 100);
-//    	addToScene(scores);
-    }
+   
     
     //TODO 背景音樂    
     
@@ -520,10 +525,10 @@ public class MainScene implements KeyListener{
 		
 		//設定自動生出敵機的時間
 		if(!isgameOver){
-			_new_enemy.schedule(enemy1_Task, 1000*10, 1000*10);
-			_new_enemy.schedule(enemy2_Task, 0, 1000* 5);
-			_new_enemy.schedule(enemy3_Task, 1000*30, 1000*25);
-			_new_enemy.schedule(enemy4_Task, 1000*20, 1000*15);
+			_new_enemy.schedule(enemy1_Task, 1000*10, 1000*8);
+			_new_enemy.schedule(enemy2_Task, 0, 1000* 3);
+			_new_enemy.schedule(enemy3_Task, 1000*30, 1000*20);
+			_new_enemy.schedule(enemy4_Task, 1000*20, 1000*11);
 		}
 	}
 
