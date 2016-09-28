@@ -127,14 +127,14 @@ public class MainScene implements KeyListener{
     	//new scord text
     	showScord = new _showText(this, 150, 100); //int width, int height
     	showScord.setPosition(80, 30);
-    	showScord.setScore(0);//呼叫setString才會用graphic畫出
+    	showScord.setScore("0");//呼叫setString才會用graphic畫出
     	addToScene(showScord);
     	
     	//show fps
     	
     	giveFPS = new _showFPS(this, 150, 100); //int width, int height
     	giveFPS.setPosition(80, 55);
-    	giveFPS.setFPS("");//呼叫setString才會將問劑用graphic畫出
+    	giveFPS.setFPS("0");//呼叫setString才會將問劑用graphic畫出
     	addToScene(giveFPS);
     }     
      
@@ -163,11 +163,8 @@ public class MainScene implements KeyListener{
 
     //更新
     public void update(){  
-//    	System.out.println("size: "+_render_objects.size());
 	    updateFrame();
 	    fighterHPBar();//秀血條
-//	    showScord.setScore(scord);//show scord
-//	    System.out.println(scord);
 	        if(_fighter.isfighterAlive){//fighter還活著才繼續
 		        _fighter.move(); 
 	        	checkCollision();
@@ -179,10 +176,13 @@ public class MainScene implements KeyListener{
 		        	FPS=((double)frames/(double)(getStartTime-lastTime))*1000;
 		        	lastTime = getStartTime;
 		        	frames =0;
+		        	int fpsInt = (int)FPS;
+		        	String f = String.valueOf(fpsInt);
+		        	
+		        	giveFPS.setFPS(f);
 		        	System.out.println("FPS: "+(int)FPS);
 		        }
 	        }
-//        System.out.println(frames ++ +" ,getStartTime: "+getStartTime);
     }
 
     //移除場景物件
@@ -254,7 +254,9 @@ public class MainScene implements KeyListener{
 	        			if(_enemyArray.get(j)._enemy_HP<1){
 	        				//給分數
 	        				scord += 18;
-	        				showScord.setScore(scord);//show scord
+	        				String s = Integer.toString(scord);
+	        				showScord.setScore(s);//show scord
+	        				
 	        				
 	        				//移除死機
 	        				_enemyArray.get(j).destory();
@@ -309,7 +311,8 @@ public class MainScene implements KeyListener{
 			    			if(_enemyArray.get(j)._enemy_HP<1){
 			    				//給分數
 			    				scord += 9;
-			    				
+			    				String s = Integer.toString(scord);
+		        				showScord.setScore(s);//show scord
 			    				//移除死機
 			    				_enemyArray.get(j).destory();
 			    				removeFromScene(_enemyArray.get(j));
@@ -368,11 +371,10 @@ public class MainScene implements KeyListener{
 	    		}
 	    	}
 //	    	System.out.println("FPS: "+ FPS + "Scords: "+ scord);
-//	    	System.out.println("colli hp: "+_fighter._fighter_HP);
     }
     
     
-    //血條 TODO FIX 血條
+//血條
     protected void fighterHPBar(){    			
     	hpBarBG.setPosition(_fighter._x, _fighter._y+main.HP_Position);    	
     	hpBarLive.setPosition(_fighter._x, _fighter._y+main.HP_Position);
@@ -381,12 +383,9 @@ public class MainScene implements KeyListener{
     	hpBarLive.setWidth(_fighter._fighter_HP); 
     	
     	//fix green bar position on the left
-//    	hpBarLive.setPosition((hpBarBG._x-((100-_fighter._fighter_HP)/2+1)),_fighter._y+30);
     	if(_fighter._fighter_HP!=100){
     		hpBarLive.setPosition((hpBarBG._x-((100-_fighter._fighter_HP)/2+1)),_fighter._y+30);
     	}
-//    	System.out.println("new bar width: "+ hpBarLive.get_width());
-
     	
     	if(hpBarLive.get_width()<=0){// if fighter dead, remove hp bars
     		removeFromScene(hpBarBG);
@@ -394,11 +393,7 @@ public class MainScene implements KeyListener{
     	}
     }
 
-    //TODO FPS與分數(打敵機的分數計算)
-   
-    
-    //TODO 背景音樂    
-    
+      
     
 //scorlling bg1 and bg2
     private void bgScrol(){   	
@@ -451,10 +446,6 @@ public class MainScene implements KeyListener{
     //new bullet
 		if(_fighter.isfighterAlive){
 			double a1 = System.currentTimeMillis();
-//			System.out.println("a1 -01 "+a1);
-//	    	System.out.println("old-01 "+old);
-//	    	System.out.println("pass01 "+pass);
-//	    	if(pass>=490){
 				_bullet fBullet = new _bullet(this, "res\\bullet.png", 12, 16);
 		    	fBullet.setPosition(_fighter._x, _fighter._y);
 		    	addToScene(fBullet);
