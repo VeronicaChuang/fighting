@@ -14,7 +14,7 @@ public class music {
 	
 	protected void bgMusic(){
     	try {
-    		 new JFXPanel();//    		 
+    		 new JFXPanel();//construct Javafx environment   		 
 	         Media hit = new Media(Paths.get("res/Music/bgMusic.mp3").toUri().toString());
 	         BGmediaPlayer = new MediaPlayer(hit);
 	         BGmediaPlayer.setOnEndOfMedia(new Runnable() {

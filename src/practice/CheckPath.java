@@ -1,4 +1,4 @@
-package index;
+package practice;
 
 import java.io.File;
 

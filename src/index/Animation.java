@@ -52,26 +52,7 @@ public class Animation extends Sprite{
                 left+=frame_width;
                 _frames.add(new Sprite(scene, img_frame, width, height));
             }
-            //子彈連發有間距
-//            if(top<=300){
-//            	if(!img_path.equals("res\\explosion.png")){
-//		            for(int i=0; i<frame_count; i++) {//把連圖剪成一個一個圖
-//		                BufferedImage img_frame = cropImage(stream, new Rectangle(left, top, frame_width, frame_height));
-//		                left+=frame_width;
-//		                _frames.add(new Sprite(scene, img_frame, width, height));
-//		            }
-//            	}else{
-//            		System.out.println("pic explo");
-//            		for(int i=0; i<frame_count; i++) {//把連圖剪成一個一個圖
-//		                BufferedImage img_frame = cropImage(stream, new Rectangle(left, top, frame_width, frame_height));
-//		                left+=frame_width;
-//		               
-//	                	System.out.println("left: "+left+" top: "+top);
-//
-//		                _frames.add(new Sprite(scene, img_frame, width, height));
-//		            }            		
-//            	}
-//            }
+            
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -203,7 +203,8 @@ public class MainScene implements KeyListener{
         _render_objects.add(new RenderLayer(sprite, layer));
     }
 
-    protected void gameOver(){//fighter dead clear all sprite in render objects and show GameOver
+  //if fighter dead clear all sprite in render objects and show GameOver
+    protected void gameOver(){
     	isgameOver = true;
     	_fighter.isfighterAlive = false;
     	main.clearSprite();
@@ -221,7 +222,7 @@ public class MainScene implements KeyListener{
         
     protected void checkCollision(){ 
     	//fighter bullet
-    	Rectangle fighterR = _fighter.getBound();            //主機rec
+    	Rectangle fighterR = _fighter.getBound();            //主機rect
 	    	for(int i=0; i<_fighter_Missile.size();i++){     //主機子彈
 	    		Rectangle fBullet = _fighter_Missile.get(i).getBound();
 	    			    		
@@ -397,7 +398,7 @@ public class MainScene implements KeyListener{
 
       
     
-//scorlling bg1 and bg2
+//Scrolling bg1 and bg2
     private void bgScrol(){   	
     	//initial bg1 position
     	_sprite_bg1.setPosition(main.WINDOWS_WIDTH/2, bg1NewY);//(x,384)
