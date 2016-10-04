@@ -49,7 +49,7 @@ public class Fighter extends Animation{
 	    	}
 	    	
 	    	if(dy == MainScene.Velocity_Fighter){//往下走
-	    		if((this._y+40)>=main.WINDOWS_HEIGHT){//主角圖片離邊界長度+血調位置+長度
+	    		if((this._y+40+26)>=main.WINDOWS_HEIGHT){//主角圖片離邊界長度+血調位置+長度
 	    			dy =0;
 	    			this._y +=dy;
 	    		}else{

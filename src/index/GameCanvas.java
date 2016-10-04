@@ -19,12 +19,11 @@ public class GameCanvas extends Canvas {
 	protected double FPS=0;
 	protected int Scord =0;
 	
-	//play bg music
+//	//play bg music
 	protected music playmusic = new music();
 	protected boolean stop =false;
 	
-	public GameCanvas(){
-		
+	public GameCanvas(){		
 		playmusic.bgMusic();
 		playmusic.bgPlay();
 		

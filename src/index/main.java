@@ -33,7 +33,7 @@ public class main extends Canvas{
     private static List<Sprite> _images = new LinkedList<>();
     private static MainScene _main_scene = new MainScene();
     public static int moveVerti = 0, moveHoriz = 0;
-   
+    
     
     public static void main(String[] args){
     	
@@ -54,6 +54,8 @@ public class main extends Canvas{
        
         _frame.addKeyListener(_main_scene);  
         onUpdate();
+        
+       
        
     }
 

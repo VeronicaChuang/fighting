@@ -82,6 +82,7 @@ public class MainScene implements KeyListener{
 	music playMusic = new music();
 	int i =0;
 	
+	
 	class RenderLayer{
         public Sprite Sprite;
         public int Layer;
@@ -136,11 +137,12 @@ public class MainScene implements KeyListener{
     	giveFPS.setPosition(80, 55);
     	giveFPS.setFPS("0");//呼叫setString才會將問劑用graphic畫出
     	addToScene(giveFPS);
+    	    	
     }     
      
     //重置飛機位置
     private void SpawnFighter(){
-        _fighter.setPosition(main.WINDOWS_WIDTH / 2, main.WINDOWS_HEIGHT - 60);
+        _fighter.setPosition(main.WINDOWS_WIDTH / 2, main.WINDOWS_HEIGHT - 65);
       
     }
 
